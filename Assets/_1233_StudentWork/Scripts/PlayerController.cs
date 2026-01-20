@@ -26,6 +26,12 @@ public class PlayerController : MonoBehaviour
     private int _numberOfJumps;
     [SerializeField] private int maxNumberOfJumps = 2;
 
+    [SerializeField]
+    private Animator _animator;
+
+    private static readonly int Speed =
+        Animator.StringToHash("Speed");
+
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
@@ -36,6 +42,7 @@ public class PlayerController : MonoBehaviour
         ApplyGravity(); // for proper landing from higher platforms
         ApplyRotation(); // for character proper rotation while moving
         ApplyMovement(); // for character moving around the area
+        AnimationParameters();
     }
 
     private void ApplyGravity()
@@ -92,4 +99,10 @@ public class PlayerController : MonoBehaviour
     }
 
     private bool IsGrounded() => _characterController.isGrounded;
+
+    private void AnimationParameters()
+    {
+        _animator.SetFloat(
+            Speed, _input.sqrMagnitude);
+    }
 }
