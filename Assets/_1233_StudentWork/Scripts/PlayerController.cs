@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,7 +9,9 @@ public class PlayerController : MonoBehaviour
     private CharacterController _characterController;
     private Vector3 _direction;
 
-    // for proper transition of all character action types
+    private bool _wasGrounded;  // detect landing
+    private bool _jumpRequested;    // detect jumping trigger
+
     [SerializeField] private float smoothTime = 0.05f;
     private float _currentVelocity;
 
@@ -26,11 +25,14 @@ public class PlayerController : MonoBehaviour
     private int _numberOfJumps;
     [SerializeField] private int maxNumberOfJumps = 2;
 
-    [SerializeField]
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
 
-    private static readonly int Speed =
-        Animator.StringToHash("Speed");
+    // Stored animator parameters as hashes for cleaner code
+
+    private static readonly int SpeedHash = Animator.StringToHash("Speed");
+    private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
+    private static readonly int JumpHash = Animator.StringToHash("Jump");
+    private static readonly int LandHash = Animator.StringToHash("Land");
 
     private void Awake()
     {
@@ -39,22 +41,23 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        ApplyGravity(); // for proper landing from higher platforms
-        ApplyRotation(); // for character proper rotation while moving
-        ApplyMovement(); // for character moving around the area
-        AnimationParameters();
+        ApplyGravity();
+        ApplyRotation();
+        ApplyMovement();
+
+        HandleJump();
+        HandleLanding();
+        UpdateAnimatorParameters();
     }
+
+    // Main movement input (gravity, rotation, & movement)
 
     private void ApplyGravity()
     {
-        if (IsGrounded() && _velocity < 0.0f)
-        {
-            _velocity = -1.0f;
-        }
+        if (IsGrounded() && _velocity < 0f)
+            _velocity = -1f;
         else
-        {
             _velocity += _gravity * gravityMultiplier * Time.deltaTime;
-        }
 
         _direction.y = _velocity;
     }
@@ -63,31 +66,50 @@ public class PlayerController : MonoBehaviour
     {
         if (_input.sqrMagnitude == 0) return;
 
-        var targetAngle = Mathf.Atan2(y: _direction.x, x: _direction.z) * Mathf.Rad2Deg;
-        var angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
-        transform.rotation = Quaternion.Euler(x: 0.0f, y: angle, z: 0.0f);
+        float targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
+        float angle = Mathf.SmoothDampAngle(
+            transform.eulerAngles.y,
+            targetAngle,
+            ref _currentVelocity,
+            smoothTime);
+
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
 
     private void ApplyMovement()
     {
-        _characterController.Move(motion: _direction * speed * Time.deltaTime);
+        _characterController.Move(_direction * speed * Time.deltaTime);
     }
 
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
-        _direction = new Vector3(_input.x, y: 0.0f, z: _input.y);
+        _direction = new Vector3(_input.x, 0f, _input.y);
     }
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (!context.started) return;
+        if (context.started)
+            _jumpRequested = true;  // Set when Jump is triggered to be handled in Update
+    }
+
+    // Transferred Jump logic to HandleJump to avoid double triggers
+
+    private void HandleJump()
+    {
+        if (!_jumpRequested) return;
         if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps) return;
-        if (_numberOfJumps == 0) StartCoroutine(WaitForLanding());
 
         _numberOfJumps++;
         _velocity = jumpPower;
-        // _velocity = jumpPower / _numberOfJumps;
+
+        if (IsGrounded())
+            _animator.SetTrigger(JumpHash);
+
+        if (_numberOfJumps == 1)
+            StartCoroutine(WaitForLanding());
+
+        _jumpRequested = false;
     }
 
     private IEnumerator WaitForLanding()
@@ -98,11 +120,23 @@ public class PlayerController : MonoBehaviour
         _numberOfJumps = 0;
     }
 
-    private bool IsGrounded() => _characterController.isGrounded;
+    // Sends gameplay state info to Animator
 
-    private void AnimationParameters()
+    private void UpdateAnimatorParameters()
     {
-        _animator.SetFloat(
-            Speed, _input.sqrMagnitude);
+        _animator.SetFloat(SpeedHash, _input.sqrMagnitude);
+        _animator.SetBool(IsGroundedHash, IsGrounded());
     }
+
+    private void HandleLanding()
+    {
+        bool grounded = IsGrounded();
+
+        if (!_wasGrounded && grounded)
+            _animator.SetTrigger(LandHash);
+
+        _wasGrounded = grounded;
+    }
+
+    private bool IsGrounded() => _characterController.isGrounded;
 }
