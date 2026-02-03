@@ -17,7 +17,7 @@ public class MainMenu : MenuBase
 
     private void OnEnable()
     {
-        _startButton.Select();
+        AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.MainMenu, 1);
     }
 
     public void ButtonStart()

@@ -9,16 +9,15 @@ public class PlayerController : MonoBehaviour
     private CharacterController _characterController;
     private Vector3 _direction;
 
-    private bool _wasGrounded;  // detect landing
-    private bool _jumpRequested;    // detect jumping trigger
+    private bool _wasGrounded;
+    private bool _jumpRequested;
 
     [SerializeField] private float smoothTime = 0.05f;
     private float _currentVelocity;
 
     [SerializeField] private float speed;
-
-    private float _gravity = -9.81f;
     [SerializeField] private float gravityMultiplier = 3.0f;
+    private float _gravity = -9.81f;
     private float _velocity;
 
     [SerializeField] private float jumpPower;
@@ -27,8 +26,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Animator _animator;
 
-    // Stored animator parameters as hashes for cleaner code
-
+    // Animator hashes
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
     private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
     private static readonly int JumpHash = Animator.StringToHash("Jump");
@@ -37,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _wasGrounded = IsGrounded();
     }
 
     private void Update()
@@ -50,12 +49,12 @@ public class PlayerController : MonoBehaviour
         UpdateAnimatorParameters();
     }
 
-    // Main movement input (gravity, rotation, & movement)
+    #region Movement
 
     private void ApplyGravity()
     {
         if (IsGrounded() && _velocity < 0f)
-            _velocity = -1f;
+            _velocity = -1f; // stick to ground
         else
             _velocity += _gravity * gravityMultiplier * Time.deltaTime;
 
@@ -67,12 +66,7 @@ public class PlayerController : MonoBehaviour
         if (_input.sqrMagnitude == 0) return;
 
         float targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(
-            transform.eulerAngles.y,
-            targetAngle,
-            ref _currentVelocity,
-            smoothTime);
-
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
         transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
 
@@ -87,29 +81,32 @@ public class PlayerController : MonoBehaviour
         _direction = new Vector3(_input.x, 0f, _input.y);
     }
 
+    #endregion
+
+    #region Jumping
+
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.started)
-            _jumpRequested = true;  // Set when Jump is triggered to be handled in Update
+        if (context.started && (IsGrounded() || _numberOfJumps < maxNumberOfJumps))
+            _jumpRequested = true;
     }
-
-    // Transferred Jump logic to HandleJump to avoid double triggers
 
     private void HandleJump()
     {
         if (!_jumpRequested) return;
-        if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps) return;
+        _jumpRequested = false;
+
+        if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps)
+            return;
 
         _numberOfJumps++;
         _velocity = jumpPower;
 
-        if (IsGrounded())
-            _animator.SetTrigger(JumpHash);
+        _animator.SetTrigger(JumpHash);
 
+        // Track landing only on first jump
         if (_numberOfJumps == 1)
             StartCoroutine(WaitForLanding());
-
-        _jumpRequested = false;
     }
 
     private IEnumerator WaitForLanding()
@@ -117,10 +114,12 @@ public class PlayerController : MonoBehaviour
         yield return new WaitUntil(() => !IsGrounded());
         yield return new WaitUntil(IsGrounded);
 
-        _numberOfJumps = 0;
+        _numberOfJumps = 0; // reset jumps after landing
     }
 
-    // Sends gameplay state info to Animator
+    #endregion
+
+    #region Animator & Landing
 
     private void UpdateAnimatorParameters()
     {
@@ -133,10 +132,14 @@ public class PlayerController : MonoBehaviour
         bool grounded = IsGrounded();
 
         if (!_wasGrounded && grounded)
+        {
             _animator.SetTrigger(LandHash);
+        }
 
         _wasGrounded = grounded;
     }
+
+    #endregion
 
     private bool IsGrounded() => _characterController.isGrounded;
 }
