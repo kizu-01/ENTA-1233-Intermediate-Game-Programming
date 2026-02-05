@@ -22,7 +22,6 @@ public class InputMgr : Singleton<InputMgr>
     private void OnPauseAction(InputAction.CallbackContext context)
     {
         // If the player object does not exist, we are not in gameplay
-        PlayerMgr.Instance?.PauseInput();
     }
 
 }

@@ -369,6 +369,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameGlobals
       objectReference: {fileID: 0}
+    - target: {fileID: 7612291540932184289, guid: 931c026d2c7d4406f9ea4ce1972673d4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8524240638639900879, guid: 931c026d2c7d4406f9ea4ce1972673d4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
