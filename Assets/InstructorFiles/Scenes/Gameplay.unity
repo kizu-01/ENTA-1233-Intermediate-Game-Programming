@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41cd4bcd3184b5c4a972bcbbdbcddcfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameOverDelay: 5
+  _gameOverDelay: 10
 --- !u!4 &776132819
 Transform:
   m_ObjectHideFlags: 0
@@ -304,7 +304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1088705031
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1483,11 +1483,11 @@ Transform:
   m_GameObject: {fileID: 5569577911263003581}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.674154, y: -15.824652, z: 18.696857}
+  m_LocalPosition: {x: -0.7519102, y: -12.648083, z: 11.358517}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6103061824998708428}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1346084820250507329
 GameObject:
@@ -5956,7 +5956,6 @@ Transform:
   - {fileID: 7834227263528958561}
   - {fileID: 7037048841003458779}
   - {fileID: 5613213338487693229}
-  - {fileID: 1303760772851957002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &6118125537893799616
@@ -7484,7 +7483,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &7731237449264713498
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -8598,4 +8597,5 @@ SceneRoots:
   - {fileID: 1088705033}
   - {fileID: 1052763912}
   - {fileID: 776132819}
+  - {fileID: 1303760772851957002}
   - {fileID: 6103061824998708428}

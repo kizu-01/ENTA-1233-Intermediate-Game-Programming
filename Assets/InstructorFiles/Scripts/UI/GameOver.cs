@@ -18,4 +18,9 @@ public class GameOver : MenuBase
     {
         SceneMgr.Instance.LoadScene(GameScenes.MainMenu, GameMenus.MainMenu);
     }
+
+    private void OnEnable()
+    {
+        AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.GameOver, 2);
+    }
 }

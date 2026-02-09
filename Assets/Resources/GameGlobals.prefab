@@ -216,6 +216,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8524240638639900879}
     m_Modifications:
+    - target: {fileID: 2406701482528595503, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
+      propertyPath: _reusableMusicClips.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2406701482528595503, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
+      propertyPath: '_reusableMusicClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b9ddd035ca2e5e74bbfa4e657320a574, type: 3}
+    - target: {fileID: 2406701482528595503, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
+      propertyPath: '_reusableMusicClips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 8e9872581323c1549a34ebffc2f305c7, type: 3}
+    - target: {fileID: 2406701482528595503, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
+      propertyPath: '_reusableMusicClips.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d5eff10a77c61f4c9919aab36a09089, type: 3}
     - target: {fileID: 4226527120324622585, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

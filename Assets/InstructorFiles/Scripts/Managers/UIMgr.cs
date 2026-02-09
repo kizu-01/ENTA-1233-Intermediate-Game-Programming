@@ -30,14 +30,16 @@ public class UIMgr : Singleton<UIMgr>
     /// </summary>
     public void CloseAllMenus()
     {
+        _disabledMenus.Clear(); // Added for clean restart game
+
         while (_activeMenus.Count > 0)
         {
             var menu = _activeMenus.Pop();
             menu.PerformFullFadeOut(_fadeOutDuration);
-            _disabledMenus.Add(menu.MenuType(), menu);
+            _disabledMenus[menu.MenuType()] = menu; // Replaced with index to avoid crashing and update existing entry
         }
     }
-    
+
     /// <summary>
     /// Show a menu by adding it to the stack
     /// </summary>

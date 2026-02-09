@@ -15,7 +15,8 @@ public class AudioMgr : Singleton<AudioMgr>
     public enum MusicTypes
     {
         MainMenu = 0,
-        Gameplay = 1
+        Gameplay = 1,
+        GameOver = 2
     }
     
     /// <summary>

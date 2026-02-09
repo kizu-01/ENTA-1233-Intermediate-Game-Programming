@@ -18,7 +18,7 @@ public class GameStarter : MonoBehaviour
 
         Debug.Log("GameStarter: Spawning player");
         PlayerSpawnPoint spawnPoint = PlayerSpawnPoint.Instance;
-        if (spawnPoint != null)
+        if (spawnPoint == null)
             Debug.LogError("GameStarter: No spawn point found!");
         else
             PlayerMgr.Instance.SpawnPlayer(
