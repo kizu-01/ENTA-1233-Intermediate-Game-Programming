@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/InstructorFiles/Scenes/GameOver.unity
     guid: 4d59908eab214f045899234d9ef5ca04
   - enabled: 1
+    path: Assets/InstructorFiles/Scenes/LevelComplete.unity
+    guid: a8c98334da736c14b9caf11496e16780
+  - enabled: 1
     path: Assets/_1233_StudentWork/Scenes/Levels/Level_1.unity
     guid: f8679a432bd84184d8449a3a265a3a31
   - enabled: 1

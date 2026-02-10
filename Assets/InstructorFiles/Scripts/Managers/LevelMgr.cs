@@ -17,6 +17,30 @@ public class LevelMgr : Singleton<LevelMgr>
     private int _currentLevelIndex;
     public bool IsLevelLoaded { get; private set; }
 
+    public void LoadNextLevel()
+    {
+        if (_currentLevelIndex >= _levelSceneNames.Length)
+        {
+            Debug.Log("No more levels.");
+            return;
+        }
+        StartCoroutine(LoadNextLevelRoutine());
+    }
+
+    public void NextLevel()
+    {
+        _currentLevelIndex++;
+    }
+
+    private IEnumerator LoadNextLevelRoutine()
+    {
+        // Unload current level
+        string currentLevel = _levelSceneNames[_currentLevelIndex - 1];
+        yield return SceneManager.UnloadSceneAsync(currentLevel);
+        // Load next level
+        yield return LoadLevelRoutine();
+    }
+
     public void LoadCurrentLevel()
     {
         IsLevelLoaded = false;

@@ -356,6 +356,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8524240638639900879}
     m_Modifications:
+    - target: {fileID: 4627058941732817289, guid: 275b2fcd5e9d84cab82c4650ca486b5a, type: 3}
+      propertyPath: _levelCompleteMenuPrefab
+      value: 
+      objectReference: {fileID: 3694091093083164182, guid: 66097caee96326944b508b5c44dccf99, type: 3}
     - target: {fileID: 7363516041045961589, guid: 275b2fcd5e9d84cab82c4650ca486b5a, type: 3}
       propertyPath: m_Pivot.x
       value: 0
