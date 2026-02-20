@@ -47,4 +47,14 @@ public class Projectile : MonoBehaviour
         transform.forward = direction;
         Destroy(gameObject, _lifetime); // Simple destruction for now
     }
+
+    public void LaunchWithVelocity(Vector3 velocity, GameObject source)
+    {
+        _source = source;
+        _rb.linearVelocity = velocity;
+        if (velocity.sqrMagnitude > 0.001f)
+            transform.forward = velocity;
+        _rb.useGravity = true; // Force gravity for arc shots
+        Destroy(gameObject, _lifetime);
+    }
 }
