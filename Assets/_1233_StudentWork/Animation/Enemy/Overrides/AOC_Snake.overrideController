@@ -7,5 +7,13 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AOC_Snake
-  m_Controller: {fileID: 0}
-  m_Clips: []
+  m_Controller: {fileID: 9100000, guid: 09dc410dbd0c8544788ef8dfca242da2, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: cbb0790b30ebbc4438977a5007ff7045, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 57b55e7b615faea40b7b70b5f79de56e, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 8af0fafb406faeb4a84460c78a56af7f, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 857b5c872d94978419c7fe4d01186c1a, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 689e551b2e44f4f45b4cfc77e4179f37, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a9db19057d3eb724eb0365631f75a66c, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: b2af68a32ab299b4a88721efa00f1f1a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 72b52b28d83cf284189d8d92559eb80e, type: 3}

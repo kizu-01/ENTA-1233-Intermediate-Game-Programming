@@ -2,15 +2,107 @@ using UnityEngine;
 
 public class BudBrain : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public enum FireMode
     {
-        
+        FixedAxis,
+        DirectAim,
+        ArcFire
     }
 
-    // Update is called once per frame
-    void Update()
+    [Header("Components")]
+    [SerializeField] private Health _health;
+
+    [SerializeField] private ProjectileWeapon _weapon;
+    [SerializeField] private DetectionSystem _detection;
+    [SerializeField] private RotateToTarget _rotator;
+    [SerializeField] private EnemyAnimatorDriver _animator;
+
+    [Header("Settings")]
+    [SerializeField] private FireMode _mode = FireMode.DirectAim;
+
+    [SerializeField] private Vector3 _fixedAxis = Vector3.forward;
+
+    private ITargetProvider _targetProvider;
+
+    private void Awake()
     {
-        
+        _targetProvider = GetComponent<ITargetProvider>();
+        if (_health == null) _health = GetComponent<Health>();
+        if (_animator == null) _animator = GetComponent<EnemyAnimatorDriver>();
+    }
+
+    private void Update()
+    {
+        if (_health != null && _health.IsDead) return;
+
+        switch (_mode)
+        {
+            case FireMode.FixedAxis:
+                if (_weapon.CanFire)
+                {
+                    _animator?.TriggerAttack();
+                    _weapon.Fire(transform.TransformDirection(_fixedAxis),
+                        true);
+                }
+                break;
+
+            case FireMode.DirectAim:
+                HandleDirectAim();
+                break;
+
+            case FireMode.ArcFire:
+                HandleArcFire();
+                break;
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (_health != null) _health.OnDied += HandleDied;
+    }
+
+    private void OnDisable()
+    {
+        if (_health != null) _health.OnDied -= HandleDied;
+    }
+
+    private void HandleDirectAim()
+    {
+        if (_targetProvider == null || !_targetProvider.HasTarget) return;
+
+        var target = _targetProvider.GetTarget();
+        var targetPos = _targetProvider.GetTargetPosition();
+        if (_detection.IsTargetInDetectionRange(target) && _detection.HasLineOfSight(target))
+        {
+            _rotator?.FacePosition(targetPos);
+            if (_weapon.CanFire)
+            {
+                _animator?.TriggerAttack();
+                _weapon.Fire(targetPos);
+            }
+        }
+    }
+
+    private void HandleArcFire()
+    {
+        if (_targetProvider == null || !_targetProvider.HasTarget) return;
+
+        var target = _targetProvider.GetTarget();
+        var targetPos = _targetProvider.GetTargetPosition();
+        if (_detection.IsTargetInDetectionRange(target) && _detection.HasLineOfSight(target))
+        {
+            _rotator?.FacePosition(targetPos);
+            if (_weapon.CanFire)
+            {
+                _animator?.TriggerAttack();
+                _weapon.Fire(targetPos);
+            }
+        }
+    }
+
+    private void HandleDied()
+    {
+        // Stop firing, maybe play an effect
+        enabled = false;
     }
 }

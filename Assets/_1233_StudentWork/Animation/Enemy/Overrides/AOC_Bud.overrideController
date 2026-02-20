@@ -7,5 +7,13 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AOC_Bud
-  m_Controller: {fileID: 0}
-  m_Clips: []
+  m_Controller: {fileID: 9100000, guid: 09dc410dbd0c8544788ef8dfca242da2, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: cbb0790b30ebbc4438977a5007ff7045, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 07980652bbdaf784cac2a4077661b712, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 8af0fafb406faeb4a84460c78a56af7f, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4fc504f5e054158458cdd2c02798cff3, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: b2af68a32ab299b4a88721efa00f1f1a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: dade22600d3f0c042896a0f593f06cba, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 689e551b2e44f4f45b4cfc77e4179f37, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e6a4aa34c78bea04fa020f6ce07f836e, type: 3}
