@@ -19,11 +19,13 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Projectile hit: " + collision.gameObject.name);
+
         // Don't hit the source
         if (collision.gameObject == _source) return;
 
         // Check if we hit something damageable
-        var damageReceiver = collision.gameObject.GetComponent<IDamageReceiver>();
+        var damageReceiver = collision.gameObject.GetComponentInParent<IDamageReceiver>();
         if (damageReceiver != null)
         {
             var info = new DamageInfo

@@ -95,7 +95,7 @@ public class BudBrain : MonoBehaviour
             if (_weapon.CanFire)
             {
                 _animator?.TriggerAttack();
-                _weapon.Fire(targetPos);
+                _weapon.FireArc(targetPos);
             }
         }
     }
