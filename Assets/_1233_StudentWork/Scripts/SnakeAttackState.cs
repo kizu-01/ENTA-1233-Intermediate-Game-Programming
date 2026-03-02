@@ -28,11 +28,16 @@ public class SnakeAttackState : EnemyState
     {
         // Keep facing the player during the attack
         var target = _brain.TargetProvider.GetTarget();
+        if (target == null) return;
+
         var targetPos = _brain.TargetProvider.GetTargetPosition();
-        if (target != null) _brain.Rotator.FacePosition(targetPos);
+        _brain.Rotator.FacePosition(targetPos);
 
         // Return to chase state once the cooldown is over
-        if (Time.time >= _exitTime) Machine.ChangeState(new SnakeChaseState(_brain, Machine));
+        if (Time.time >= _exitTime)
+        {
+            Machine.ChangeState(new SnakeChaseState(_brain, Machine));
+        }
     }
 
     private void ApplyMeleeDamage()
@@ -40,8 +45,10 @@ public class SnakeAttackState : EnemyState
         var target = _brain.TargetProvider.GetTarget();
         if (target == null) return;
 
+        var sqrDistance = (target.position - _brain.transform.position).sqrMagnitude;
+
         // Final check to see if target is still in range
-        if (Vector3.Distance(_brain.transform.position, target.position) <= _brain.AttackRange + 0.5f)
+        if (sqrDistance <= (_brain.AttackRange + 0.5f) * (_brain.AttackRange + 0.5f))
         {
             var receiver = target.GetComponentInChildren<IDamageReceiver>();
             if (receiver != null)

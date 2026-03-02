@@ -1,5 +1,7 @@
 using TMPro;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
+using System.Collections;
 
 public class TrainingDummyBrain : MonoBehaviour
 {
@@ -45,9 +47,10 @@ public class TrainingDummyBrain : MonoBehaviour
 
     private void HandleDied()
     {
-        Debug.Log("[Dummy] Died! Resetting...");
+        Debug.Log("[Dummy] Died!");
+        Debug.Log($"HandleDied called at {Time.time}, activeSelf: {gameObject.activeSelf}");
 
-        _animatorDriver?.TriggerDie();
+        _animatorDriver.TriggerDie();
 
         if (_autoReset) Invoke(nameof(ResetDummy), _resetDelay);
     }

@@ -18,39 +18,37 @@ public class BloomAttackState : EnemyState
 
     public override void Tick()
     {
-        // 1. Check if we still have a target
+        // Check if we still have a target
         var target = _brain.TargetProvider.GetTarget();
-        var targetPos = _brain.TargetProvider.GetTargetPosition();
         if (target == null)
         {
             Machine.ChangeState(new BloomMoveState(_brain, Machine));
             return;
         }
 
-        var distance = Vector3.Distance(_brain.transform.position, target.position);
-        var hasLOS = _brain.Detection.HasLineOfSight(target);
+        // Use squared distance for efficiency
+        var sqrDistance =
+            (target.position - _brain.transform.position).sqrMagnitude;
 
-        // 2. If LOS is lost or we are out of range, go back to Move state
-        if (!hasLOS || distance > _brain.AttackRange)
+        float attackRange = _brain.AttackRange;
+
+        bool hasLOS = _brain.Detection.HasLineOfSight(target);
+
+        // If LOS lost or out of range, then reposition
+        if (!hasLOS || sqrDistance > attackRange * attackRange)
         {
             Machine.ChangeState(new BloomMoveState(_brain, Machine));
             return;
         }
 
-        // 3. Face the player and shoot if weapon is ready
-        _brain.Rotator.FacePosition(targetPos);
+        // Face the target
+        _brain.Rotator.FacePosition(target.position);
+
+        // Fire if ready
         if (_brain.Weapon.CanFire)
         {
             _brain.AnimatorDriver.TriggerAttack();
-            _brain.Weapon.Fire(targetPos);
-        }
-
-        // 4. Optional: If player gets too close, back away (Kite)
-        if (distance < _brain.StopRange - 1f)
-        {
-            // Simple kite logic: move away from target
-            var kiteDir = (_brain.transform.position - target.position).normalized;
-            _brain.Mover?.SetDestination(_brain.transform.position + kiteDir * 2f);
+            _brain.Weapon.Fire(target.position);
         }
     }
 }

@@ -46,7 +46,7 @@ public class SnakeBrain : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_health != null) _health.OnDied += HandleDied;
+        if (_health != null) _health.OnDied -= HandleDied;
     }
 
     private void HandleDied()

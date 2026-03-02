@@ -3,6 +3,8 @@ using UnityEngine;
 public class SnakeChaseState : EnemyState
 {
     private readonly SnakeBrain _brain;
+    private float _nextRepathTime;
+    private const float RepathInterval = 0.3f;
 
     public SnakeChaseState(SnakeBrain brain, EnemyStateMachine machine) : base(machine)
     {
@@ -11,21 +13,31 @@ public class SnakeChaseState : EnemyState
 
     public override void Tick()
     {
-        // 1. Get the player's position
+        // Get the player's position
         var target = _brain.TargetProvider.GetTarget();
         if (target == null) return;
 
-        // 2. Tell the mover to go there
-        _brain.Mover?.SetDestination(target.position);
+        var sqrDistance = 
+            (target.position - _brain.transform.position).sqrMagnitude;
 
-        // 3. Update animations based on movement speed
+        // Switch to attack state if close
+        if (sqrDistance <= _brain.AttackRange * _brain.AttackRange)
+        {
+            Machine.ChangeState(new SnakeAttackState(_brain, Machine));
+            return;
+        }
+
+        // Repath at interval (do not spam)
+        if (Time.time >= _nextRepathTime)
+        {
+            _brain.Mover?.SetDestination(target.position);
+            _nextRepathTime = Time.time + RepathInterval;
+        }
+
+        // Update animation
         if (_brain.Mover != null)
             _brain.AnimatorDriver.SetSpeed(_brain.Mover.Velocity.magnitude);
         else
             _brain.AnimatorDriver.SetSpeed(0);
-
-        // 4. If we are close enough, switch to Attack state
-        var distance = Vector3.Distance(_brain.transform.position, target.position);
-        if (distance <= _brain.AttackRange) Machine.ChangeState(new SnakeAttackState(_brain, Machine));
     }
 }
