@@ -32,18 +32,19 @@ public class DetectionSystem : MonoBehaviour
         return Vector3.Distance(transform.position, target.position) <= _detectionRange;
     }
 
-    public bool HasLineOfSight(Transform target)
+    public bool HasLineOfSight(Transform target, Vector3 offset)
     {
         if (target == null) return false;
 
-        var directionToTarget = (target.position - _eyePosition.position).normalized;
-        var distanceToTarget = Vector3.Distance(_eyePosition.position, target.position);
+        Vector3 targetWithOffset = target.position + offset;
+        var directionToTarget = (targetWithOffset - _eyePosition.position).normalized;
+        var distanceToTarget = Vector3.Distance(_eyePosition.position, targetWithOffset);
 
         // Check if target is within FOV
         if (Vector3.Angle(transform.forward, directionToTarget) > _fieldOfView / 2f) return false;
 
         // Raycast ignoring the target layer
-        if (Physics.Raycast(_eyePosition.position, directionToTarget, out RaycastHit hit, distanceToTarget))
+        if (Physics.Raycast(_eyePosition.position, directionToTarget, out RaycastHit hit, distanceToTarget, _obstructionMask))
         {
             // If we hit anything that is NOT the target (or its children), LOS is blocked
             if (hit.transform != target && !hit.transform.IsChildOf(target))
