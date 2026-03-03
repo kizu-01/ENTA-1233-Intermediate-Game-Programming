@@ -42,13 +42,13 @@ public class DetectionSystem : MonoBehaviour
         // Check if target is within FOV
         if (Vector3.Angle(transform.forward, directionToTarget) > _fieldOfView / 2f) return false;
 
-        // Raycast to check for obstructions
-        if (Physics.Raycast(_eyePosition.position, directionToTarget,
-            out var hit, distanceToTarget, _obstructionMask))
-            // If we hit something other than the target
-            // (or a child of the target), then LOS is blocked
+        // Raycast ignoring the target layer
+        if (Physics.Raycast(_eyePosition.position, directionToTarget, out RaycastHit hit, distanceToTarget))
+        {
+            // If we hit anything that is NOT the target (or its children), LOS is blocked
             if (hit.transform != target && !hit.transform.IsChildOf(target))
                 return false;
+        }
 
         return true;
     }

@@ -10,6 +10,7 @@ public class BloomBrain : MonoBehaviour
     [SerializeField] private RotateToTarget _rotator;
     [SerializeField] private Health _health;
     [SerializeField] private ProjectileWeapon _weapon;
+    [SerializeField] public Transform WeaponOrigin;
 
     [Header("Settings")]
     [SerializeField] private float _attackRange = 10f;
