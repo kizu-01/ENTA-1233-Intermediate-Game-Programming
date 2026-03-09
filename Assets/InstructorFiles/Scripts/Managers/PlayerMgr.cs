@@ -22,4 +22,9 @@ public class PlayerMgr : Singleton<PlayerMgr>
         PlayerObject = Instantiate(_playerPrefab, position, rotation);
         Debug.Log("Player spawned");
     }
+
+    public void DebugAssignAsPlayer(GameObject existingPlayer)
+    {
+        PlayerObject = existingPlayer;
+    }
 }
