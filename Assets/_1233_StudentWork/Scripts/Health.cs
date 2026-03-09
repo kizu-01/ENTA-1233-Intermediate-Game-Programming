@@ -30,6 +30,7 @@ public class Health : MonoBehaviour
 
     public void ResetHealth()
     {
+        Debug.Log("ResetHealth called at: " + Time.time);
         CurrentHealth = _maxHealth;
         IsDead = false;
         OnReset?.Invoke();
@@ -52,7 +53,7 @@ public class Health : MonoBehaviour
         if(IsDead) return;
 
         CurrentHealth += amount;
-        CurrentHealth = Mathf.Clamp(CurrentHealth - amount, 0, _maxHealth);
+        CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, _maxHealth);
         OnHealed?.Invoke();
     }
 

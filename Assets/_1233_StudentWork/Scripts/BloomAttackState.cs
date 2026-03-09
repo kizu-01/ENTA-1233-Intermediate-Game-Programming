@@ -13,6 +13,7 @@ public class BloomAttackState : EnemyState
     {
         // Stop moving to shoot
         _brain.Mover?.Stop();
+        _brain.Mover?.SetEnabled(false);
         _brain.AnimatorDriver.SetSpeed(0);
     }
 
@@ -44,13 +45,10 @@ public class BloomAttackState : EnemyState
             _brain.AnimatorDriver.TriggerAttack();
             _brain.Weapon.Fire(targetPos);
         }
+    }
 
-        // 4. Optional: If player gets too close, back away (Kite)
-        if (distance < _brain.StopRange - 1f)
-        {
-            // Simple kite logic: move away from target
-            var kiteDir = (_brain.transform.position - target.position).normalized;
-            _brain.Mover?.SetDestination(_brain.transform.position + kiteDir * 2f);
-        }
+    public override void Exit()
+    {
+        _brain.Mover?.SetEnabled(true);
     }
 }
