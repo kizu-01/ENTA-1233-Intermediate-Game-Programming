@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps)
             return;
 
-        _numberOfJumps++;
+       // _numberOfJumps++;
         _velocity = jumpPower;
 
         _animator.SetTrigger(JumpHash);
