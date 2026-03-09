@@ -20,6 +20,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] private MenuBase _settingsMenuPrefab;
     [SerializeField] private MenuBase _inGameUIPrefab;
     [SerializeField] private MenuBase _gameOverMenuPrefab;
+    [SerializeField] private MenuBase _levelCompleteMenuPrefab;
 
     private readonly Dictionary<GameMenus, MenuBase> _menuInstances = new();
     private readonly Stack<MenuBase> _activeMenus = new();
@@ -30,14 +31,16 @@ public class UIMgr : Singleton<UIMgr>
     /// </summary>
     public void CloseAllMenus()
     {
+        _disabledMenus.Clear(); // Added for clean restart game
+
         while (_activeMenus.Count > 0)
         {
             var menu = _activeMenus.Pop();
             menu.PerformFullFadeOut(_fadeOutDuration);
-            _disabledMenus.Add(menu.MenuType(), menu);
+            _disabledMenus[menu.MenuType()] = menu; // Replaced with index to avoid crashing and update existing entry
         }
     }
-    
+
     /// <summary>
     /// Show a menu by adding it to the stack
     /// </summary>
@@ -227,6 +230,9 @@ public class UIMgr : Singleton<UIMgr>
                 break;
             case GameMenus.GameOverMenu:
                 menu = _gameOverMenuPrefab;
+                break;
+            case GameMenus.LevelCompleteMenu:
+                menu = _levelCompleteMenuPrefab;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(menuType), menuType, null);

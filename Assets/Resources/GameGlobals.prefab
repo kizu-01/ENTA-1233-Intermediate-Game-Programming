@@ -1,5 +1,99 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &254726825814588494
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6865137832766662115}
+  - component: {fileID: 8912157177036950002}
+  m_Layer: 0
+  m_Name: LevelMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6865137832766662115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254726825814588494}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8524240638639900879}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8912157177036950002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254726825814588494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c03918e0d4c80f45996aa48deffb809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _willNotDestroyOnLoad: 0
+  _levelSceneNames:
+  - Level_1
+  - Level_2
+--- !u!1 &7164540197057534921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8201239293004115708}
+  - component: {fileID: 4683975571335908595}
+  m_Layer: 0
+  m_Name: PlayerMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8201239293004115708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7164540197057534921}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 960, y: 540, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8524240638639900879}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4683975571335908595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7164540197057534921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c098ad20788e14c9a26c180c7e58a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _willNotDestroyOnLoad: 0
+  _playerPrefab: {fileID: 5615919690445683991, guid: 1ea11d9f27c70f94d8edec92d087f3da, type: 3}
 --- !u!1 &7612291540932184289
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,6 +129,8 @@ Transform:
   - {fileID: 3779867170531921810}
   - {fileID: 8299341234184905026}
   - {fileID: 1470805008060808805}
+  - {fileID: 6865137832766662115}
+  - {fileID: 8201239293004115708}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4984843826586603272
@@ -120,6 +216,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8524240638639900879}
     m_Modifications:
+    - target: {fileID: 2406701482528595503, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
+      propertyPath: _reusableMusicClips.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2406701482528595503, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
+      propertyPath: '_reusableMusicClips.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b9ddd035ca2e5e74bbfa4e657320a574, type: 3}
+    - target: {fileID: 2406701482528595503, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
+      propertyPath: '_reusableMusicClips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 8e9872581323c1549a34ebffc2f305c7, type: 3}
+    - target: {fileID: 2406701482528595503, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
+      propertyPath: '_reusableMusicClips.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d5eff10a77c61f4c9919aab36a09089, type: 3}
     - target: {fileID: 4226527120324622585, guid: 5f83c669dbe6dce43af6834d1908eb9e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -244,6 +356,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8524240638639900879}
     m_Modifications:
+    - target: {fileID: 4627058941732817289, guid: 275b2fcd5e9d84cab82c4650ca486b5a, type: 3}
+      propertyPath: _levelCompleteMenuPrefab
+      value: 
+      objectReference: {fileID: 3694091093083164182, guid: 66097caee96326944b508b5c44dccf99, type: 3}
     - target: {fileID: 7363516041045961589, guid: 275b2fcd5e9d84cab82c4650ca486b5a, type: 3}
       propertyPath: m_Pivot.x
       value: 0
