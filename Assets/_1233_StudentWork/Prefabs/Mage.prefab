@@ -255,7 +255,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 137015745741535505}
-  m_LocalEulerAnglesHint: {x: 0.00000029748563, y: 0.0000032071637, z: -90.00001}
+  m_LocalEulerAnglesHint: {x: 0.00000027235265, y: 0.0000017075482, z: -90.00001}
 --- !u!1 &2577829438902657064
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,7 +733,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5661363404848258417}
-  m_LocalEulerAnglesHint: {x: 0.00000029748898, y: -0.0000032071637, z: 90.00001}
+  m_LocalEulerAnglesHint: {x: 0.00000027235552, y: -0.0000034150949, z: 90.00001}
 --- !u!1 &3728199028037254108
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,6 +763,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 600348553838548507}
   - {fileID: 1853636090913785251}
   m_Father: {fileID: 4232454650235122550}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1576,6 +1577,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 35aeee74-6a91-4e10-a62d-ea9d48c697d3
     m_ActionName: 'Gameplay/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3087323935493490749}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: Attack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: bfe71705-c16a-4170-9317-8814f167d05c
+    m_ActionName: 'Gameplay/Attack[/Keyboard/f]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
@@ -1596,7 +1613,7 @@ MonoBehaviour:
   smoothTime: 0.05
   speed: 5
   gravityMultiplier: 1
-  jumpPower: 3
+  jumpPower: 3.5
   maxNumberOfJumps: 2
   _animator: {fileID: 3392238599372160440}
   _health: {fileID: 7048528977095118726}
@@ -2329,3 +2346,69 @@ Transform:
   - {fileID: 2360699817157273037}
   m_Father: {fileID: 2021331095022681196}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1143462033657311728
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 137015745741535505}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.38
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.43009984
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.5721045
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5293933
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.45547032
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 103
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 343
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_Name
+      value: spellbook_open
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+--- !u!4 &600348553838548507 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: abd15952804b477439ed5574f2c7b4b6, type: 3}
+  m_PrefabInstance: {fileID: 1143462033657311728}
+  m_PrefabAsset: {fileID: 0}

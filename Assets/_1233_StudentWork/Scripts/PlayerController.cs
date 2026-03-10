@@ -64,7 +64,6 @@ public class PlayerController : MonoBehaviour
         ApplyRotation();
         ApplyMovement();
 
-        HandleJump();
         HandleLanding();
         UpdateAnimatorParameters();
     }
@@ -107,26 +106,21 @@ public class PlayerController : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.started && (IsGrounded() || _numberOfJumps < maxNumberOfJumps))
-            _jumpRequested = true;
-    }
-
-    private void HandleJump()
-    {
-        if (!_jumpRequested) return;
-        _jumpRequested = false;
-
+        if (!context.started) return;
         if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps)
             return;
+        if (_numberOfJumps == 0)
+            StartCoroutine(WaitForLanding());
 
         _numberOfJumps++;
-        _velocity = jumpPower;
+        _velocity += jumpPower;
+    }
+    public void Attack(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
 
-        _animator.SetTrigger(JumpHash);
-
-        // Track landing only on first jump
-        if (_numberOfJumps == 1)
-            StartCoroutine(WaitForLanding());
+        Debug.Log("Attacking!");
+        _animator?.SetTrigger("Attack");
     }
 
     private IEnumerator WaitForLanding()
