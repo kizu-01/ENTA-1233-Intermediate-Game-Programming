@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int maxNumberOfJumps = 2;
 
     [SerializeField] private Animator _animator;
+    [SerializeField] private Health _health;
 
     // Animator hashes
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
@@ -36,6 +37,25 @@ public class PlayerController : MonoBehaviour
     {
         _characterController = GetComponent<CharacterController>();
         _wasGrounded = IsGrounded();
+        if (_health == null) _health = GetComponent<Health>();
+    }
+
+    private void OnEnable()
+    {
+        if (_health != null)
+        {
+            _health.OnDamaged += HandleDamaged;
+            _health.OnDied += HandleDied;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_health != null)
+        {
+            _health.OnDamaged -= HandleDamaged;
+            _health.OnDied -= HandleDied;
+        }
     }
 
     private void Update()
@@ -99,7 +119,7 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps)
             return;
 
-       // _numberOfJumps++;
+        _numberOfJumps++;
         _velocity = jumpPower;
 
         _animator.SetTrigger(JumpHash);
@@ -142,4 +162,32 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     private bool IsGrounded() => _characterController.isGrounded;
+
+
+
+    private void HandleDamaged(DamageInfo info)
+    {
+        Debug.Log(
+            $"[Player] Hit by " +
+            $"{info.Source?.name ?? "Unknown"} " +
+            $"for {info.Amount} damage. " +
+            $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+        _animator?.SetTrigger("Hit");
+    }
+
+    private void HandleDied()
+    {
+        Debug.Log("[Player] Died!");
+        _animator?.SetTrigger("Die");
+        _characterController = null;
+        enabled = false;
+
+        StartCoroutine(GameOverTransition());
+    }
+
+    private IEnumerator GameOverTransition()
+    {
+        yield return new WaitForSeconds(2);
+        GameMgr.Instance.GameOver();
+    }
 }

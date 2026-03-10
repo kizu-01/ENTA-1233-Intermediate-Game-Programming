@@ -19,7 +19,6 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Projectile hit: " + collision.gameObject.name);
 
         // Don't hit the source
         if (collision.gameObject == _source) return;
@@ -38,8 +37,8 @@ public class Projectile : MonoBehaviour
             damageReceiver.ApplyDamage(info);
         }
 
-        // Destroy on impact
-        Destroy(gameObject);
+            // Destroy on impact
+            Destroy(gameObject);
     }
 
     public void Launch(Vector3 direction, GameObject source)
