@@ -96,6 +96,8 @@ public class BudBrain : MonoBehaviour
         if (_targetProvider == null || !_targetProvider.HasTarget) return;
 
         var target = _targetProvider.GetTarget();
+        if (target == null) return;
+
         var targetPos = _targetProvider.GetTargetPosition();
         if (_detection.IsTargetInDetectionRange(target) && _detection.HasLineOfSight(target, _targetProvider.GetOffset()))
         {

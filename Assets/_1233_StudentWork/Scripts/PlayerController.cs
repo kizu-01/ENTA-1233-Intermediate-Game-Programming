@@ -202,6 +202,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("[Player] Died!");
         _animator?.SetTrigger("Die");
+        _animator = null;
         _characterController = null;
         enabled = false;
 

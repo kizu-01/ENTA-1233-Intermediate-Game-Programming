@@ -50,16 +50,37 @@ public class SpikeBrain : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_health != null) _health.OnDied += HandleDied;
+        if (_health != null)
+        {
+            _health.OnDamaged += HandleDamaged;
+            _health.OnDied += HandleDied;
+        }
     }
 
     private void OnDisable()
     {
-        if (_health != null) _health.OnDied -= HandleDied;
+        if (_health != null)
+        {
+            _health.OnDamaged -= HandleDamaged;
+            _health.OnDied -= HandleDied;
+        }
+    }
+
+    private void HandleDamaged(DamageInfo info)
+    {
+        Debug.Log(
+            $"[Spike] Hit by " +
+            $"{info.Source?.name ?? "Unknown"} " +
+            $"for {info.Amount} damage. " +
+            $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+        _animatorDriver?.TriggerHit();
     }
 
     private void HandleDied()
     {
+        Debug.Log("[Spike] Died!");
+
+        if (_stateMachine != null) _stateMachine.enabled = false;
         if (_patrolMotor != null) _patrolMotor.enabled = false;
         if (_contactDamage != null) _contactDamage.enabled = false;
         if (Mover != null)
@@ -68,6 +89,9 @@ public class SpikeBrain : MonoBehaviour
             Mover.SetEnabled(false);
         }
 
-        if (_animatorDriver != null) _animatorDriver.TriggerDie(); 
+        _animatorDriver?.TriggerDie();
+        _animatorDriver = null;
+
+        Destroy(gameObject, 3f);
     }
 }

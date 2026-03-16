@@ -6,7 +6,7 @@ public class SpikePatrolState : EnemyState
 
     private int _currentIndex;
     private float _waitTimer;
-    private const float WaitTime = 1f; // optional wait at each point
+    private const float WaitTime = 0.5f; // optional wait at each point
 
     public SpikePatrolState(SpikeBrain brain, EnemyStateMachine machine)
         : base(machine)

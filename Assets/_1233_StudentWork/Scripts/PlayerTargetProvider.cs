@@ -8,13 +8,22 @@ public class PlayerTargetProvider : MonoBehaviour, ITargetProvider
 
     public Transform GetTarget()
     {
-        if (HasTarget) return PlayerMgr.Instance.PlayerObject.transform;
-        return null;
+        if (PlayerMgr.Instance == null) return null;
+
+        if (!PlayerMgr.Instance.HasSpawnedPlayer) return null;
+
+        if (PlayerMgr.Instance.PlayerObject == null) return null;
+
+        return PlayerMgr.Instance.PlayerObject.transform;
     }
 
     public Vector3 GetTargetPosition()
     {
-        if (HasTarget) return PlayerMgr.Instance.PlayerObject.transform.position + _offset;
+        var target = GetTarget();
+
+        if (target != null)
+            return target.position + _offset;
+
         return transform.position;
     }
     public Vector3 GetOffset()
