@@ -52,6 +52,11 @@ public class Projectile : MonoBehaviour
     public void LaunchWithVelocity(Vector3 velocity, GameObject source)
     {
         _source = source;
+        if (float.IsNaN(velocity.x) || float.IsNaN(velocity.y) || float.IsNaN(velocity.z))
+        {
+            Debug.LogWarning("Projectile velocity invalid. Aborting shot.");
+            return;
+        }
         _rb.linearVelocity = velocity;
         if (velocity.sqrMagnitude > 0.001f)
             transform.forward = velocity;

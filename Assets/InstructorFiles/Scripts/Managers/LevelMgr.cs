@@ -63,4 +63,9 @@ public class LevelMgr : Singleton<LevelMgr>
 
         IsLevelLoaded = true;
     }
+
+    public void ResetLevels()
+{
+    _currentLevelIndex = 0;
+}
 }

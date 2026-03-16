@@ -26,6 +26,7 @@ public class LevelComplete : MenuBase
 
     public void ButtonMainMenu()
     {
+        LevelMgr.Instance.ResetLevels();
         SceneMgr.Instance.LoadScene(GameScenes.MainMenu, GameMenus.MainMenu);
     }
 }

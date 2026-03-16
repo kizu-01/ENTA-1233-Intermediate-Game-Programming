@@ -37,6 +37,8 @@ public class ProjectileWeapon : MonoBehaviour, IWeapon
         _nextFireTime = Time.time + 1f / _fireRate;
 
         var velocity = CalculateArcVelocity(_muzzle.position, targetPosition, _arcHeight);
+        if (float.IsNaN(velocity.x) || float.IsNaN(velocity.y) || float.IsNaN(velocity.z))
+            return;
         var projectile = Instantiate(_projectilePrefab, _muzzle.position, _muzzle.rotation);
         projectile.LaunchWithVelocity(velocity, gameObject);
     }

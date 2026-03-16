@@ -29,8 +29,13 @@ public class NavMeshAgentMover : MonoBehaviour, IMover
     public void Stop()
     {
         if (_agent == null) return;
+
+        if (!_agent.isActiveAndEnabled || !_agent.isOnNavMesh)
+            return;
+
         _agent.isStopped = true;
         _agent.ResetPath();
+        _agent.velocity = Vector3.zero;
     }
 
     public void Resume()

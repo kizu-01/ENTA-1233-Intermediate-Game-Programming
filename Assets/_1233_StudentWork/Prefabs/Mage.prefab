@@ -1869,7 +1869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoothTime: 0.05
-  speed: 6
+  speed: 7
   gravityMultiplier: 1.5
   jumpPower: 7
   maxNumberOfJumps: 2
@@ -1998,7 +1998,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 3442273495450981012, guid: 41b12132ce74ae1409b141cceed56795, type: 3}
   firePoint: {fileID: 7138750955475074326}
   attackCooldown: 0.5
-  attackRange: 12
+  attackRange: 15
   enemyLayer:
     serializedVersion: 2
     m_Bits: 4096

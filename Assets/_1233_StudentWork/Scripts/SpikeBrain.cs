@@ -89,9 +89,10 @@ public class SpikeBrain : MonoBehaviour
             Mover.SetEnabled(false);
         }
 
+        _animatorDriver?.SetSpeed(0);
         _animatorDriver?.TriggerDie();
-        _animatorDriver = null;
+        enabled = false;
 
-        Destroy(gameObject, 3f);
+        Destroy(gameObject, 2f);
     }
 }

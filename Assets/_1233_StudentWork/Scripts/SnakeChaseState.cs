@@ -17,6 +17,13 @@ public class SnakeChaseState : EnemyState
         var target = _brain.TargetProvider.GetTarget();
         if (target == null) return;
 
+        if (!_brain.Detection.IsTargetInDetectionRange(target))
+        {
+            _brain.Mover?.Stop();
+            _brain.AnimatorDriver.SetSpeed(0);
+            return;
+        }
+
         var sqrDistance = 
             (target.position - _brain.transform.position).sqrMagnitude;
 
