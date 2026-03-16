@@ -12,11 +12,11 @@ public class PlayerController : MonoBehaviour
     private bool _wasGrounded;
     private bool _jumpRequested;
 
-    [SerializeField] private float smoothTime = 0.05f;
+    [SerializeField] private float smoothTime = 0.02f;
     private float _currentVelocity;
 
     [SerializeField] private float speed;
-    [SerializeField] private float gravityMultiplier = 3.0f;
+    [SerializeField] private float gravityMultiplier = 1.5f;
     private float _gravity = -9.81f;
     private float _velocity;
 
@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Animator _animator;
     [SerializeField] private Health _health;
+    [SerializeField] private PlayerAttack _playerAttack;
+
+    private Vector3 _moveDirection;
+    [SerializeField] private Transform orientation;
 
     // Animator hashes
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
@@ -73,31 +77,55 @@ public class PlayerController : MonoBehaviour
     private void ApplyGravity()
     {
         if (IsGrounded() && _velocity < 0f)
-            _velocity = -1f; // stick to ground
+        {
+            _velocity = -2f;
+        }
         else
-            _velocity += _gravity * gravityMultiplier * Time.deltaTime;
-
-        _direction.y = _velocity;
+        {
+            if (_velocity > 0)
+            {
+                // going up
+                _velocity += _gravity * gravityMultiplier * Time.deltaTime;
+            }
+            else
+            {
+                // falling
+                _velocity += _gravity * gravityMultiplier * 3.0f * Time.deltaTime;
+            }
+        }
     }
 
     private void ApplyRotation()
     {
-        if (_input.sqrMagnitude == 0) return;
+        if (_moveDirection.sqrMagnitude == 0) return;
 
-        float targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
+        float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.z) * Mathf.Rad2Deg;
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
         transform.rotation = Quaternion.Euler(0f, angle, 0f);
     }
 
     private void ApplyMovement()
     {
-        _characterController.Move(_direction * speed * Time.deltaTime);
+        Vector3 finalMove = _moveDirection * speed;
+        finalMove.y = _velocity;
+
+        _characterController.Move(finalMove * Time.deltaTime);
     }
 
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
-        _direction = new Vector3(_input.x, 0f, _input.y);
+
+        Vector3 forward = orientation.forward;
+        Vector3 right = orientation.right;
+
+        forward.y = 0f;
+        right.y = 0f;
+
+        forward.Normalize();
+        right.Normalize();
+
+        _moveDirection = (forward * _input.y + right * _input.x).normalized;
     }
 
     #endregion
@@ -121,6 +149,7 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("Attacking!");
         _animator?.SetTrigger("Attack");
+        _playerAttack?.TryAttack();
     }
 
     private IEnumerator WaitForLanding()

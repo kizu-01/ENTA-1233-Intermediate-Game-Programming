@@ -1,9 +1,18 @@
+using UnityEngine;
+
+
 /// <summary>
 /// Game over screen
 /// Allows for quitting or retrying
 /// </summary>
 public class LevelComplete : MenuBase
 {
+    void OnEnable()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
     public override GameMenus MenuType()
     {
         return GameMenus.LevelCompleteMenu;

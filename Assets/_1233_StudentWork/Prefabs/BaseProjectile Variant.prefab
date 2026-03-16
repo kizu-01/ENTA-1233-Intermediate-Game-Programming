@@ -8,9 +8,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2002383612729717697, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 2748723026587198772, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
       propertyPath: m_Name
       value: BaseProjectile Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2748723026587198772, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3148918086241322679, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -51,6 +59,14 @@ PrefabInstance:
     - target: {fileID: 3148918086241322679, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3700064878614958473, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8553630054780480625, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

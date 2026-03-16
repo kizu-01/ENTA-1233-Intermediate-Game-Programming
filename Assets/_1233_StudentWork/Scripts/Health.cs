@@ -6,7 +6,7 @@ using UnityEngine;
 ///     Manages health values and state for an entity.
 ///     Emits events for other systems (VFX, Audio, UI) to listen to.
 /// </summary>
-public class Health : MonoBehaviour
+public class Health : MonoBehaviour, IDamageReceiver
 {
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private bool _isInvulnerable;
@@ -38,6 +38,7 @@ public class Health : MonoBehaviour
 
     public void ApplyDamage(DamageInfo info)
     {
+        Debug.Log($"{gameObject.name} took {info.Amount} damage");
         if (IsDead || _isInvulnerable) return;
 
         CurrentHealth -= info.Amount;
