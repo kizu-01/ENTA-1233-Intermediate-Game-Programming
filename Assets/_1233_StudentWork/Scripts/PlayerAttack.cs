@@ -9,6 +9,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.5f;
     [SerializeField] private float attackRange = 12f;
     [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private LayerMask obstacleLayer;
 
     private float nextAttackTime;
 
@@ -27,6 +28,7 @@ public class PlayerAttack : MonoBehaviour
 
         nextAttackTime = Time.time + attackCooldown;
 
+        // ALWAYS get nearest enemy (no lock-on)
         Transform target = FindClosestEnemy();
 
         Vector3 direction;
@@ -35,14 +37,16 @@ public class PlayerAttack : MonoBehaviour
         {
             Vector3 targetPoint = GetTargetPoint(target);
 
-            StartCoroutine(SmoothFaceTarget(targetPoint));
+            // Instantly face the target
+            FaceTargetInstant(targetPoint);
 
+            // Shoot directly at target
             direction = (targetPoint - firePoint.position).normalized;
         }
         else
         {
             // fallback if no enemy
-            direction = transform.forward;
+            direction = firePoint.forward;
         }
 
         FireProjectile(direction);
@@ -50,6 +54,8 @@ public class PlayerAttack : MonoBehaviour
 
     Transform FindClosestEnemy()
     {
+        LayerMask combinedMask = enemyLayer | obstacleLayer;
+
         Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, enemyLayer);
 
         Transform bestTarget = null;
@@ -57,18 +63,24 @@ public class PlayerAttack : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            Vector3 directionToEnemy = hit.transform.position - transform.position;
+            Vector3 targetPoint = GetTargetPoint(hit.transform);
+            Vector3 directionToEnemy = targetPoint - firePoint.position;
             float distance = directionToEnemy.magnitude;
-
             Vector3 dirNormalized = directionToEnemy.normalized;
+
+            // 2. Fixed Raycast: Check if the first thing hit is not the enemy
+            if (Physics.Raycast(firePoint.position, dirNormalized, out RaycastHit rayHit, attackRange, combinedMask))
+            {
+                // If ray hits an obstacle before it hits enemy collider, skip
+                if (rayHit.collider.gameObject != hit.gameObject)
+                    continue;
+            }
+
+            // 3. Focus heavily towards distance first
             float dot = Vector3.Dot(transform.forward, dirNormalized);
 
-            // ignore enemies mostly behind the player
-            if (dot < 0.3f)
-                continue;
-
-            // scoring: prioritize enemies in the center of the screen
-            float score = distance * (1.5f - dot);
+            // Target enemies in front
+            float score = distance - (dot * 2.0f);
 
             if (score < bestScore)
             {
@@ -97,12 +109,15 @@ public class PlayerAttack : MonoBehaviour
         Collider col = target.GetComponent<Collider>();
 
         if (col != null)
-            return col.bounds.center;
+        {
+            // Aim slightly above center to avoid hitting feet
+            return col.bounds.center + Vector3.up * (col.bounds.size.y * 0.3f);
+        }
 
-        return target.position + Vector3.up * 1.2f;
+        return target.position + Vector3.up * 1.5f;
     }
 
-    void FaceTarget(Vector3 targetPoint)
+    void FaceTargetInstant(Vector3 targetPoint)
     {
         Vector3 direction = targetPoint - transform.position;
         direction.y = 0f;
@@ -110,24 +125,11 @@ public class PlayerAttack : MonoBehaviour
         if (direction.sqrMagnitude < 0.001f)
             return;
 
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-        transform.rotation = Quaternion.Lerp(
-            transform.rotation,
-            targetRotation,
-            20f * Time.deltaTime
-        );
+        transform.rotation = Quaternion.LookRotation(direction);
     }
 
-    private IEnumerator SmoothFaceTarget(Vector3 targetPoint)
+    public bool HasTarget()
     {
-        float timer = 0f;
-
-        while (timer < 0.15f) // short smooth turn
-        {
-            FaceTarget(targetPoint);
-            timer += Time.deltaTime;
-            yield return null;
-        }
+        return FindClosestEnemy() != null;
     }
 }

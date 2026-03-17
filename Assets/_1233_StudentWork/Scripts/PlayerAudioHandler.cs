@@ -5,6 +5,7 @@ public class PlayerAudioHandler : MonoBehaviour
     [SerializeField] private AudioSource footstepSource;
     [SerializeField] private AudioSource jumpSource;
     [SerializeField] private AudioSource landSource;
+    [SerializeField] private AudioSource attackSource;
 
     public void PlayFootstep()
     {
@@ -22,5 +23,11 @@ public class PlayerAudioHandler : MonoBehaviour
     {
         if (landSource != null)
             landSource.Play();
+    }
+
+    public void PlayAttack()   // called by Attack animation event
+    {
+        if (attackSource != null)
+            attackSource.Play();
     }
 }

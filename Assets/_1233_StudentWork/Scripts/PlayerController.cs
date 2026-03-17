@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour
 
     private bool _wasGrounded;
     private bool _jumpRequested;
+    public bool IsAttacking { get; private set; }
 
-    [SerializeField] private float smoothTime = 0.02f;
     private float _currentVelocity;
 
     [SerializeField] private float speed;
@@ -96,12 +96,15 @@ public class PlayerController : MonoBehaviour
     {
         if (_moveDirection.sqrMagnitude == 0) return;
 
+        if (_playerAttack != null && _playerAttack.HasTarget())
+            return;
+
         float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.z) * Mathf.Rad2Deg;
 
         transform.rotation = Quaternion.Lerp(
-        transform.rotation,
-        Quaternion.Euler(0f, targetAngle, 0f),
-        15f * Time.deltaTime
+            transform.rotation,
+            Quaternion.Euler(0f, targetAngle, 0f),
+            15f * Time.deltaTime
         );
     }
 
@@ -150,8 +153,19 @@ public class PlayerController : MonoBehaviour
     {
         if (!context.started) return;
 
+        IsAttacking = true;
+
         _animator?.SetTrigger("Attack");
         _playerAttack?.TryAttack();
+        _audioHandler?.PlayAttack();
+
+        StartCoroutine(ResetAttackFlag());
+    }
+
+    private IEnumerator ResetAttackFlag()
+    {
+        yield return new WaitForSeconds(0.2f);
+        IsAttacking = false;
     }
 
     #endregion
