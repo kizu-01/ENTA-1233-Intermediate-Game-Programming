@@ -69,6 +69,9 @@ public class SnakeBrain : MonoBehaviour
 
     private void HandleDied()
     {
+        if (_stateMachine != null)
+            _stateMachine.enabled = false;
+
         _stateMachine.ChangeState(null);
         if (Mover != null)
         {

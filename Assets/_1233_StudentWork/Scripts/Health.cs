@@ -30,7 +30,6 @@ public class Health : MonoBehaviour, IDamageReceiver
 
     public void ResetHealth()
     {
-        Debug.Log("ResetHealth called at: " + Time.time);
         CurrentHealth = _maxHealth;
         IsDead = false;
         OnReset?.Invoke();

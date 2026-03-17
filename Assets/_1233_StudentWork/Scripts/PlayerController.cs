@@ -21,8 +21,7 @@ public class PlayerController : MonoBehaviour
     private float _velocity;
 
     [SerializeField] private float jumpPower;
-    private int _numberOfJumps;
-    [SerializeField] private int maxNumberOfJumps = 2;
+    [SerializeField] private PlayerAudioHandler _audioHandler;
 
     [SerializeField] private Animator _animator;
     [SerializeField] private Health _health;
@@ -34,8 +33,6 @@ public class PlayerController : MonoBehaviour
     // Animator hashes
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
     private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
-    private static readonly int JumpHash = Animator.StringToHash("Jump");
-    private static readonly int LandHash = Animator.StringToHash("Land");
 
     private void Awake()
     {
@@ -100,8 +97,12 @@ public class PlayerController : MonoBehaviour
         if (_moveDirection.sqrMagnitude == 0) return;
 
         float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
-        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+        transform.rotation = Quaternion.Lerp(
+        transform.rotation,
+        Quaternion.Euler(0f, targetAngle, 0f),
+        15f * Time.deltaTime
+        );
     }
 
     private void ApplyMovement()
@@ -134,30 +135,23 @@ public class PlayerController : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (!context.started) return;
-        if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps)
-            return;
-        if (_numberOfJumps == 0)
-            StartCoroutine(WaitForLanding());
+        if (!context.performed) return;
 
-        _numberOfJumps++;
-        _velocity += jumpPower;
+        if (!IsGrounded()) return;
+
+        _velocity = jumpPower;
+
+        _animator?.SetTrigger("Jump");
+        _animator.SetBool("IsJumping", true);
+        _audioHandler?.PlayJump();
     }
+
     public void Attack(InputAction.CallbackContext context)
     {
         if (!context.started) return;
 
-        Debug.Log("Attacking!");
         _animator?.SetTrigger("Attack");
         _playerAttack?.TryAttack();
-    }
-
-    private IEnumerator WaitForLanding()
-    {
-        yield return new WaitUntil(() => !IsGrounded());
-        yield return new WaitUntil(IsGrounded);
-
-        _numberOfJumps = 0; // reset jumps after landing
     }
 
     #endregion
@@ -176,17 +170,16 @@ public class PlayerController : MonoBehaviour
 
         if (!_wasGrounded && grounded)
         {
-            _animator.SetTrigger(LandHash);
+            _animator.SetTrigger("Land");
         }
 
         _wasGrounded = grounded;
+        _animator.SetBool("IsJumping", false);
     }
 
     #endregion
 
     private bool IsGrounded() => _characterController.isGrounded;
-
-
 
     private void HandleDamaged(DamageInfo info)
     {

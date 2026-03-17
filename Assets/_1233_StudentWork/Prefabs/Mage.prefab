@@ -1873,6 +1873,7 @@ MonoBehaviour:
   gravityMultiplier: 1.5
   jumpPower: 7
   maxNumberOfJumps: 2
+  _audioHandler: {fileID: 4236815415018172712}
   _animator: {fileID: 3392238599372160440}
   _health: {fileID: 7048528977095118726}
   _playerAttack: {fileID: 839827435031264587}

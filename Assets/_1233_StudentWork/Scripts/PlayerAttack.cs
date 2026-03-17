@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,43 +29,55 @@ public class PlayerAttack : MonoBehaviour
 
         Transform target = FindClosestEnemy();
 
+        Vector3 direction;
+
         if (target != null)
         {
-            Vector3 direction = (target.position - firePoint.position).normalized;
-            FireProjectile(direction);
+            Vector3 targetPoint = GetTargetPoint(target);
+
+            StartCoroutine(SmoothFaceTarget(targetPoint));
+
+            direction = (targetPoint - firePoint.position).normalized;
         }
         else
         {
-            FireProjectile(firePoint.forward);
+            // fallback if no enemy
+            direction = transform.forward;
         }
+
+        FireProjectile(direction);
     }
 
     Transform FindClosestEnemy()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, attackRange, enemyLayer);
 
-        Transform closest = null;
-        float closestDistance = Mathf.Infinity;
+        Transform bestTarget = null;
+        float bestScore = Mathf.Infinity;
 
         foreach (Collider hit in hits)
         {
             Vector3 directionToEnemy = hit.transform.position - transform.position;
+            float distance = directionToEnemy.magnitude;
 
-            float dot = Vector3.Dot(transform.forward, directionToEnemy.normalized);
+            Vector3 dirNormalized = directionToEnemy.normalized;
+            float dot = Vector3.Dot(transform.forward, dirNormalized);
 
-            if (dot < 0.5f)
+            // ignore enemies mostly behind the player
+            if (dot < 0.3f)
                 continue;
 
-            float distance = directionToEnemy.sqrMagnitude;
+            // scoring: prioritize enemies in the center of the screen
+            float score = distance * (1.5f - dot);
 
-            if (distance < closestDistance)
+            if (score < bestScore)
             {
-                closestDistance = distance;
-                closest = hit.transform;
+                bestScore = score;
+                bestTarget = hit.transform;
             }
         }
 
-        return closest;
+        return bestTarget;
     }
 
     void FireProjectile(Vector3 direction)
@@ -77,5 +90,44 @@ public class PlayerAttack : MonoBehaviour
 
         projectile.GetComponent<Projectile>()
             .Launch(direction, gameObject);
+    }
+
+    Vector3 GetTargetPoint(Transform target)
+    {
+        Collider col = target.GetComponent<Collider>();
+
+        if (col != null)
+            return col.bounds.center;
+
+        return target.position + Vector3.up * 1.2f;
+    }
+
+    void FaceTarget(Vector3 targetPoint)
+    {
+        Vector3 direction = targetPoint - transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
+            return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation,
+            targetRotation,
+            20f * Time.deltaTime
+        );
+    }
+
+    private IEnumerator SmoothFaceTarget(Vector3 targetPoint)
+    {
+        float timer = 0f;
+
+        while (timer < 0.15f) // short smooth turn
+        {
+            FaceTarget(targetPoint);
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 }

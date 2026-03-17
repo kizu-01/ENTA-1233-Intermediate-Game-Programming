@@ -19,8 +19,6 @@ public class ContactDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Spike triggered: " + other.name);
-
         TryApplyDamage(other.gameObject);
     }
 
