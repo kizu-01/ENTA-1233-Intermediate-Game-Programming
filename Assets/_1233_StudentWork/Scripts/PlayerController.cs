@@ -119,17 +119,11 @@ public class PlayerController : MonoBehaviour
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
-
-        Vector3 forward = orientation.forward;
-        Vector3 right = orientation.right;
-
-        forward.y = 0f;
-        right.y = 0f;
-
-        forward.Normalize();
-        right.Normalize();
-
-        _moveDirection = (forward * _input.y + right * _input.x).normalized;
+        Vector3 moveRaw = new(_input.x, 0, _input.y);
+        Camera camera = CameraMgr.Instance._mainCamera;
+        Vector3 forward = Vector3.Cross(camera.transform.right, Vector3.up);
+        Quaternion quat = Quaternion.LookRotation(forward, camera.transform.up);
+        _moveDirection = quat * moveRaw;
     }
 
     #endregion
