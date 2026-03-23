@@ -9,6 +9,12 @@ public class SpikeBrain : MonoBehaviour
     [SerializeField] private ContactDamage _contactDamage;
     [SerializeField] private EnemyAnimatorDriver _animatorDriver;
     [SerializeField] private Transform[] _patrolPoints;
+
+    [SerializeField] private GameObject explosionEffect;
+    [SerializeField] private float explosionRadius = 5f;
+    [SerializeField] private float explosionForce = 10f;
+    [SerializeField] private int explosionDamage = 20;
+
     public Transform[] PatrolPoints => _patrolPoints;
 
     // Expose Mover publicly like other brains do
@@ -92,6 +98,36 @@ public class SpikeBrain : MonoBehaviour
         _animatorDriver?.SetSpeed(0);
         _animatorDriver?.TriggerDie();
         enabled = false;
+
+        // Spawn explosion VFX
+        Instantiate(explosionEffect, transform.position, Quaternion.identity);
+
+        // Damage nearby objects
+        Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius);
+
+        foreach (var hit in hits)
+        {
+            // Damage
+            var damageReceiver = hit.GetComponent<IDamageReceiver>();
+            if (damageReceiver != null)
+            {
+                damageReceiver.ApplyDamage(new DamageInfo
+                {
+                    Amount = explosionDamage,
+                    Source = gameObject,
+                    HitPoint = hit.transform.position,
+                    HitNormal = Vector3.up
+                });
+            }
+
+            // Knockback (if rigidbody exists)
+            var rb = hit.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                Vector3 dir = (hit.transform.position - transform.position).normalized;
+                rb.AddForce(dir * explosionForce, ForceMode.Impulse);
+            }
+        }
 
         Destroy(gameObject, 2f);
     }

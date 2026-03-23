@@ -200,6 +200,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  explosionEffect: {fileID: 3486997669170616825, guid: 34182a2b91f047f4cac21b6b9e2a7225, type: 3}
+  explosionRadius: 5
+  explosionForce: 10
+  explosionDamage: 20
 --- !u!54 &3936164423276412236
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -8,6 +8,12 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float _lifetime = 5f;
     [SerializeField] private bool _useGravity;
 
+    [SerializeField] private GameObject impactEffect;
+    [SerializeField] private float explosionRadius = 3f;
+    [SerializeField] private int explosionDamage = 20;
+    [SerializeField] private LayerMask damageLayers;
+    [SerializeField] private float pushDistance = 2f;
+
     private Rigidbody _rb;
     private GameObject _source;
 
@@ -37,8 +43,31 @@ public class Projectile : MonoBehaviour
             damageReceiver.ApplyDamage(info);
         }
 
-            // Destroy on impact
-            Destroy(gameObject);
+        if (impactEffect != null)
+        {
+            Instantiate(
+                impactEffect,
+                collision.contacts[0].point,
+                Quaternion.identity
+            );
+        }
+
+        Vector3 hitPoint = collision.contacts[0].point;
+
+        // Spawn explosion VFX
+        if (impactEffect != null)
+        {
+            Instantiate(
+                impactEffect,
+                hitPoint,
+                Quaternion.LookRotation(collision.contacts[0].normal)
+            );
+        }
+
+        // Do explosion logic
+        Explode(hitPoint);
+        // Destroy on impact
+        Destroy(gameObject);
     }
 
     public void Launch(Vector3 direction, GameObject source)
@@ -47,6 +76,41 @@ public class Projectile : MonoBehaviour
         _rb.linearVelocity = direction.normalized * _speed;
         transform.forward = direction;
         Destroy(gameObject, _lifetime); // Simple destruction for now
+    }
+
+    void Explode(Vector3 position)
+    {
+        Collider[] hits = Physics.OverlapSphere(position, explosionRadius, damageLayers);
+
+        foreach (var hit in hits)
+        {
+            // damage
+            var receiver = hit.GetComponentInParent<IDamageReceiver>();
+            if (receiver != null)
+            {
+                receiver.ApplyDamage(new DamageInfo
+                {
+                    Amount = explosionDamage,
+                    Source = _source,
+                    HitPoint = position,
+                    HitNormal = Vector3.up
+                });
+            }
+
+            // push back / knockback effect
+            var mover = hit.GetComponentInParent<IMover>();
+            if (mover != null)
+            {
+                Vector3 dir = (hit.transform.position - position).normalized;
+
+                float dist = Vector3.Distance(position, hit.transform.position);
+                float force = Mathf.Lerp(pushDistance, 0f, dist / explosionRadius);
+
+                Vector3 pushPos = hit.transform.position + dir * force;
+
+                mover.SetDestination(pushPos);
+            }
+        }
     }
 
     public void LaunchWithVelocity(Vector3 velocity, GameObject source)
