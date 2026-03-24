@@ -14,8 +14,21 @@ public class LevelMgr : Singleton<LevelMgr>
 {
     [SerializeField] private string[] _levelSceneNames;
 
+    public string[] LevelSceneNames => _levelSceneNames;
+
     private int _currentLevelIndex;
     public bool IsLevelLoaded { get; private set; }
+
+    public void SetCurrentLevel(int currentLevelIndex)
+    {
+        _currentLevelIndex = currentLevelIndex;
+    }
+
+    public void LoadCurrentLevel()
+    {
+        IsLevelLoaded = false;
+        StartCoroutine(LoadLevelRoutine());
+    }
 
     public void LoadNextLevel()
     {
@@ -39,12 +52,6 @@ public class LevelMgr : Singleton<LevelMgr>
         yield return SceneManager.UnloadSceneAsync(currentLevel);
         // Load next level
         yield return LoadLevelRoutine();
-    }
-
-    public void LoadCurrentLevel()
-    {
-        IsLevelLoaded = false;
-        StartCoroutine(LoadLevelRoutine());
     }
 
     private IEnumerator LoadLevelRoutine()
