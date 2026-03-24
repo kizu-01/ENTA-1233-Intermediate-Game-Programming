@@ -3205,7 +3205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3672166550975803276, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _mode
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5678807058853747731, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _detectionRange
@@ -11773,7 +11773,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5169429739100052134, guid: 9f47296c7b1d44c4ebde8e8a8e71ac80, type: 3}
-      insertIndex: 7
+      insertIndex: -1
       addedObject: {fileID: 5478127051850192923}
     - targetCorrespondingSourceObject: {fileID: 5169429739100052134, guid: 9f47296c7b1d44c4ebde8e8a8e71ac80, type: 3}
       insertIndex: -1
@@ -11808,7 +11808,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10301, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 2ce838d244802f145b326c5d8c7ff109, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11944,7 +11944,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.5
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -12115,7 +12115,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -12380,7 +12380,7 @@ ParticleSystem:
     startRotation:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.2617994
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -12430,7 +12430,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    randomizeRotationDirection: 0
+    randomizeRotationDirection: 0.5
     gravitySource: 0
     maxNumParticles: 1000
     customEmitterVelocity: {x: 0, y: 0, z: 0}
