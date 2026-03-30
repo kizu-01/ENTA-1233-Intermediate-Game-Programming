@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 
 /// <summary>
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 /// </summary>
 public class GameUI : MenuBase
 {
+    [SerializeField] private TextMeshProUGUI _scoreText;
+
     public override GameMenus MenuType()
     {
         return GameMenus.InGameUI;
@@ -38,6 +41,14 @@ public class GameUI : MenuBase
     private void OnDisable()
     {
         if (PlayerMgr.Instance != null) PlayerMgr.Instance.OnPlayerAssigned -= HandlePlayerAssigned;
+    }
+
+    private void Update()
+    {
+        if (_scoreText != null)
+        {
+            _scoreText.text = "Score: " + GameMgr.Instance.Score;
+        }
     }
 
     private void HandlePlayerAssigned(GameObject playerObject)

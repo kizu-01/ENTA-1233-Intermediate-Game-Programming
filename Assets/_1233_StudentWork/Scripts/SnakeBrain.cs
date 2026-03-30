@@ -69,6 +69,8 @@ public class SnakeBrain : MonoBehaviour
 
     private void HandleDied()
     {
+        GameMgr.Instance.AddScore(150);
+
         if (_stateMachine != null)
             _stateMachine.enabled = false;
 

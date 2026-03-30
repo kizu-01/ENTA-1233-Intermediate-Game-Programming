@@ -70,6 +70,8 @@ public class BloomBrain : MonoBehaviour
 
     private void HandleDied()
     {
+        GameMgr.Instance.AddScore(200);
+
         if (_stateMachine != null)
             _stateMachine.enabled = false;
 

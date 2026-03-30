@@ -123,6 +123,7 @@ public class BudBrain : MonoBehaviour
     private void HandleDied()
     {
         Debug.Log("[Bud] Died!");
+        GameMgr.Instance.AddScore(100);
 
         enabled = false;
 
