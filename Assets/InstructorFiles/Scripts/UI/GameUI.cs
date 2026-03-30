@@ -25,16 +25,14 @@ public class GameUI : MenuBase
         }
 
         // if player was set already
-        if (PlayerMgr.Instance.HasSpawnedPlayer)
+        if (PlayerMgr.Instance.HasSpawnedPlayer && PlayerMgr.Instance.PlayerObject != null)
         {
             HandlePlayerAssigned(PlayerMgr.Instance.PlayerObject);
-            return;
         }
-
-        // Otherwise wait for the player to spawn
-        PlayerMgr.Instance.OnPlayerAssigned += HandlePlayerAssigned;
-
-        AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.Gameplay, 1);
+        else
+        {
+            PlayerMgr.Instance.OnPlayerAssigned += HandlePlayerAssigned;
+        }
     }
 
     private void OnDisable()
@@ -50,7 +48,7 @@ public class GameUI : MenuBase
             return;
         }
 
-        _playerHealth = playerObject.GetComponentInChildren<Health>();
+        _playerHealth = playerObject.GetComponent<Health>();
         if (_playerHealth == null)
         {
             Debug.LogError("GameUI: Player object does not have a Health component.");
@@ -63,6 +61,8 @@ public class GameUI : MenuBase
 
     private void RefreshHealthBar(Health health)
     {
+        Debug.Log("UI updating: " + (health != null ? health.NormalizedHealth : 0f));
+
         if (_healthFillImage == null) return;
 
         _healthFillImage.fillAmount = health != null ? health.NormalizedHealth : 0f;
