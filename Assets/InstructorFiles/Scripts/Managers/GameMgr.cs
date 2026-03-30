@@ -61,6 +61,8 @@ public class GameMgr : Singleton<GameMgr>
     public void StartGame()
     {
         IsGameRunning = true;
+
+        AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.Gameplay, 1);
     }
 
     /// <summary>
