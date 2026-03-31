@@ -2587,7 +2587,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223359896646791105, guid: f2c65c2c1ed1348489574968d349e7a9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 8223359896646791105, guid: f2c65c2c1ed1348489574968d349e7a9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3343,11 +3343,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3672166550975803276, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _mode
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5678807058853747731, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _detectionRange
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5678807058853747731, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _obstructionMask.m_Bits
@@ -5797,7 +5797,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223359896646791105, guid: f2c65c2c1ed1348489574968d349e7a9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 8223359896646791105, guid: f2c65c2c1ed1348489574968d349e7a9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7328,7 +7328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5678807058853747731, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _detectionRange
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5678807058853747731, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _obstructionMask.m_Bits
@@ -10349,7 +10349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223359896646791105, guid: f2c65c2c1ed1348489574968d349e7a9, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 8223359896646791105, guid: f2c65c2c1ed1348489574968d349e7a9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -12322,7 +12322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5678807058853747731, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _detectionRange
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5678807058853747731, guid: bd353f13b909abf45a0bbd1925153643, type: 3}
       propertyPath: _obstructionMask.m_Bits

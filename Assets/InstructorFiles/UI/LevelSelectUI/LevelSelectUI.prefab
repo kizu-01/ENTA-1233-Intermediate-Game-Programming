@@ -985,6 +985,7 @@ GameObject:
   - component: {fileID: 5978335890028513342}
   - component: {fileID: 6365801590835862676}
   - component: {fileID: 7759477483224727364}
+  - component: {fileID: 889246792590222323}
   m_Layer: 5
   m_Name: LevelSelectUI
   m_TagString: Untagged
@@ -1101,6 +1102,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backButton: {fileID: 3393032025438414295}
+--- !u!114 &889246792590222323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8071609373031173996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1b2a60b91f4fb549945cabf6e0f85c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _buttonContainer: {fileID: 1040488395174173837}
+  _buttonPrefab: {fileID: 4213591553161885861, guid: ec65681f466f21c4296c982dc9515340, type: 3}
 --- !u!1 &8846217469251466167
 GameObject:
   m_ObjectHideFlags: 0

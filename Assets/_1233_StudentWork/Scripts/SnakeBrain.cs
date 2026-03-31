@@ -74,14 +74,14 @@ public class SnakeBrain : MonoBehaviour
         if (_stateMachine != null)
             _stateMachine.enabled = false;
 
-        _stateMachine.ChangeState(null);
         if (Mover != null)
         {
             Mover.Stop();
             Mover.SetEnabled(false);
         }
 
-        _animatorDriver.TriggerDie();
+        _animatorDriver?.TriggerDie();
+
         enabled = false;
 
         Destroy(gameObject, 2f);

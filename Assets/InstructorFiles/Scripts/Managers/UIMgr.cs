@@ -19,6 +19,7 @@ public class UIMgr : Singleton<UIMgr>
     [SerializeField] private MenuBase _mainMenuPrefab;
     [SerializeField] private MenuBase _settingsMenuPrefab;
     [SerializeField] private MenuBase _inGameUIPrefab;
+    [SerializeField] private MenuBase _levelSelectMenuPrefab;
     [SerializeField] private MenuBase _gameOverMenuPrefab;
     [SerializeField] private MenuBase _levelCompleteMenuPrefab;
 
@@ -227,6 +228,9 @@ public class UIMgr : Singleton<UIMgr>
                 break;
             case GameMenus.InGameUI:
                 menu = _inGameUIPrefab;
+                break;
+            case GameMenus.LevelSelectMenu:
+                menu = _levelSelectMenuPrefab;
                 break;
             case GameMenus.GameOverMenu:
                 menu = _gameOverMenuPrefab;

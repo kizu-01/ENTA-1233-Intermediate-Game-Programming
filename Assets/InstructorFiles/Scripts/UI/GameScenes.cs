@@ -6,6 +6,7 @@ public enum GameScenes
     Bootloader,
     MainMenu,
     Gameplay,
+    LevelSelect,
     GameOver,
     LevelComplete
 }

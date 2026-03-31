@@ -28,6 +28,8 @@ public class GameStarter : MonoBehaviour
         Debug.Log("GameStarter: Waiting for player to spawn...");
         yield return new WaitUntil(() => PlayerMgr.Instance.HasSpawnedPlayer);
 
+        AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.Gameplay, 1);
+
         Debug.Log("Game starting in 3 seconds...");
         yield return new WaitForSeconds(1f);
         Debug.Log("Game starting in 2 seconds...");

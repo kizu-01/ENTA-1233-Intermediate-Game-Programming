@@ -72,7 +72,7 @@ public class LevelMgr : Singleton<LevelMgr>
     }
 
     public void ResetLevels()
-{
-    _currentLevelIndex = 0;
-}
+    {
+        _currentLevelIndex = 0;
+    }
 }
