@@ -2166,7 +2166,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Attack \n=\nLEFT CLICK"
+  m_text: 'KILL
+
+    OR GET
+
+    KILLED'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89c2912b5ce35b343bf3d489132c442e, type: 2}
   m_sharedMaterial: {fileID: -4501821779251551030, guid: 89c2912b5ce35b343bf3d489132c442e, type: 2}
@@ -2938,7 +2942,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Move = WASD
+  m_text: COME & GET IT!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89c2912b5ce35b343bf3d489132c442e, type: 2}
   m_sharedMaterial: {fileID: -4501821779251551030, guid: 89c2912b5ce35b343bf3d489132c442e, type: 2}
@@ -2965,8 +2969,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
-  m_fontSizeBase: 16
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -10875,7 +10879,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Jump = Space
+  m_text: <<<<<
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 89c2912b5ce35b343bf3d489132c442e, type: 2}
   m_sharedMaterial: {fileID: -4501821779251551030, guid: 89c2912b5ce35b343bf3d489132c442e, type: 2}

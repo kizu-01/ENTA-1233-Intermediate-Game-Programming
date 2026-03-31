@@ -577,7 +577,7 @@ PrefabInstance:
     - target: {fileID: 4627058941732817289, guid: 275b2fcd5e9d84cab82c4650ca486b5a, type: 3}
       propertyPath: _levelSelectMenuPrefab
       value: 
-      objectReference: {fileID: 7759477483224727364, guid: c20b9958dcb1cbe4d85ea4f16394e214, type: 3}
+      objectReference: {fileID: 5812993580496314533, guid: c20b9958dcb1cbe4d85ea4f16394e214, type: 3}
     - target: {fileID: 4627058941732817289, guid: 275b2fcd5e9d84cab82c4650ca486b5a, type: 3}
       propertyPath: _levelCompleteMenuPrefab
       value: 
