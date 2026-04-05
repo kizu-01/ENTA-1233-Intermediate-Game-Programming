@@ -12496,6 +12496,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TopDownCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 6518924346026678162, guid: 908d813f17c08c64ea727ead4abc63d8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

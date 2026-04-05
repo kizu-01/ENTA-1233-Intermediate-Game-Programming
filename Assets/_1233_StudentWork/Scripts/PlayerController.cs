@@ -94,10 +94,33 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyRotation()
     {
-        if (_moveDirection.sqrMagnitude == 0) return;
-
+        // If there's a target, smoothly rotate to it
         if (_playerAttack != null && _playerAttack.HasTarget())
+        {
+            Transform target = _playerAttack.GetTarget();
+
+            if (target != null)
+            {
+                Vector3 direction = (target.position - transform.position).normalized;
+                direction.y = 0f;
+
+                if (direction.sqrMagnitude > 0.01f)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+                    transform.rotation = Quaternion.Lerp(
+                        transform.rotation,
+                        targetRotation,
+                        10f * Time.deltaTime
+                    );
+                }
+            }
+
             return;
+        }
+
+        // Normal movement rotation
+        if (_moveDirection.sqrMagnitude == 0) return;
 
         float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.z) * Mathf.Rad2Deg;
 
