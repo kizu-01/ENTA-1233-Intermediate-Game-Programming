@@ -16,6 +16,7 @@ public class BudBrain : MonoBehaviour
     [SerializeField] private DetectionSystem _detection;
     [SerializeField] private RotateToTarget _rotator;
     [SerializeField] private EnemyAnimatorDriver _animator;
+    [SerializeField] private EnemyAudioHandler _audio;
 
     [Header("Settings")]
     [SerializeField] private FireMode _mode = FireMode.DirectAim;
@@ -105,6 +106,7 @@ public class BudBrain : MonoBehaviour
             if (_weapon.CanFire)
             {
                 _animator?.TriggerAttack();
+                _audio?.PlayAttack();
                 _weapon.FireArc(targetPos);
             }
         }
@@ -117,6 +119,8 @@ public class BudBrain : MonoBehaviour
             $"{info.Source?.name ?? "Unknown"} " +
             $"for {info.Amount} damage. " +
             $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+
+        _audio?.PlayHurt();
         _animator?.TriggerHit();
     }
 
@@ -125,9 +129,10 @@ public class BudBrain : MonoBehaviour
         Debug.Log("[Bud] Died!");
         GameMgr.Instance.AddScore(100);
 
-        enabled = false;
-
+        _audio?.PlayDeath();
         _animator.TriggerDie();
+
+        enabled = false;
 
         Destroy(gameObject, 3f);
     }

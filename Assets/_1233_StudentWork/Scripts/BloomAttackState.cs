@@ -43,6 +43,7 @@ public class BloomAttackState : EnemyState
         if (_brain.Weapon.CanFire)
         {
             _brain.AnimatorDriver.TriggerAttack();
+            _brain.GetComponent<EnemyAudioHandler>()?.PlayAttack();
             _brain.Weapon.Fire(targetPos);
         }
     }

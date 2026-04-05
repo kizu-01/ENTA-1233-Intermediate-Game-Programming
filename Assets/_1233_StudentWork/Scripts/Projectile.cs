@@ -8,7 +8,12 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float _lifetime = 5f;
     [SerializeField] private bool _useGravity;
 
+    [Header("Impact")]
     [SerializeField] private GameObject impactEffect;
+    [SerializeField] private AudioClip impactSFX;
+    [SerializeField] private float impactVolume = 1f;
+
+    [Header("Explosion")]
     [SerializeField] private float explosionRadius = 3f;
     [SerializeField] private int explosionDamage = 20;
     [SerializeField] private LayerMask damageLayers;
@@ -16,6 +21,7 @@ public class Projectile : MonoBehaviour
 
     private Rigidbody _rb;
     private GameObject _source;
+    private AudioClip _impactOverride;
 
     private void Awake()
     {
@@ -25,11 +31,18 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
-        // Don't hit the source
         if (collision.gameObject == _source) return;
 
-        // Check if we hit something damageable
+        Vector3 hitPoint = collision.contacts[0].point;
+
+        // Play impact sound
+        AudioClip clipToPlay = _impactOverride != null ? _impactOverride : impactSFX;
+        if (clipToPlay != null)
+        {
+            AudioSource.PlayClipAtPoint(clipToPlay, hitPoint, impactVolume);
+        }
+
+        // Damage
         var damageReceiver = collision.gameObject.GetComponentInParent<IDamageReceiver>();
         if (damageReceiver != null)
         {
@@ -37,24 +50,14 @@ public class Projectile : MonoBehaviour
             {
                 Amount = _damage,
                 Source = _source,
-                HitPoint = collision.contacts[0].point,
+                HitPoint = hitPoint,
                 HitNormal = collision.contacts[0].normal,
             };
+
             damageReceiver.ApplyDamage(info);
         }
 
-        if (impactEffect != null)
-        {
-            Instantiate(
-                impactEffect,
-                collision.contacts[0].point,
-                Quaternion.identity
-            );
-        }
-
-        Vector3 hitPoint = collision.contacts[0].point;
-
-        // Spawn explosion VFX
+        // VFX
         if (impactEffect != null)
         {
             Instantiate(
@@ -64,18 +67,42 @@ public class Projectile : MonoBehaviour
             );
         }
 
-        // Do explosion logic
+        // Explosion logic
         Explode(hitPoint);
-        // Destroy on impact
+
         Destroy(gameObject);
     }
 
-    public void Launch(Vector3 direction, GameObject source)
+    public void Launch(Vector3 direction, GameObject source, AudioClip impactOverride = null)
     {
         _source = source;
+        _impactOverride = impactOverride;
+
         _rb.linearVelocity = direction.normalized * _speed;
         transform.forward = direction;
-        Destroy(gameObject, _lifetime); // Simple destruction for now
+
+        Destroy(gameObject, _lifetime);
+    }
+
+    public void LaunchWithVelocity(Vector3 velocity, GameObject source, AudioClip impactOverride = null)
+    {
+        _source = source;
+        _impactOverride = impactOverride;
+
+        if (float.IsNaN(velocity.x) || float.IsNaN(velocity.y) || float.IsNaN(velocity.z))
+        {
+            Debug.LogWarning("Projectile velocity invalid. Aborting shot.");
+            return;
+        }
+
+        _rb.linearVelocity = velocity;
+
+        if (velocity.sqrMagnitude > 0.001f)
+            transform.forward = velocity;
+
+        _rb.useGravity = true;
+
+        Destroy(gameObject, _lifetime);
     }
 
     void Explode(Vector3 position)
@@ -84,7 +111,6 @@ public class Projectile : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            // damage
             var receiver = hit.GetComponentInParent<IDamageReceiver>();
             if (receiver != null)
             {
@@ -97,7 +123,6 @@ public class Projectile : MonoBehaviour
                 });
             }
 
-            // push back / knockback effect
             var mover = hit.GetComponentInParent<IMover>();
             if (mover != null)
             {
@@ -111,20 +136,5 @@ public class Projectile : MonoBehaviour
                 mover.SetDestination(pushPos);
             }
         }
-    }
-
-    public void LaunchWithVelocity(Vector3 velocity, GameObject source)
-    {
-        _source = source;
-        if (float.IsNaN(velocity.x) || float.IsNaN(velocity.y) || float.IsNaN(velocity.z))
-        {
-            Debug.LogWarning("Projectile velocity invalid. Aborting shot.");
-            return;
-        }
-        _rb.linearVelocity = velocity;
-        if (velocity.sqrMagnitude > 0.001f)
-            transform.forward = velocity;
-        _rb.useGravity = true; // Force gravity for arc shots
-        Destroy(gameObject, _lifetime);
     }
 }

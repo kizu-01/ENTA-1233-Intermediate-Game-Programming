@@ -56,6 +56,8 @@ public class LevelMgr : Singleton<LevelMgr>
 
     private IEnumerator LoadLevelRoutine()
     {
+        GameMgr.Instance.ResetScore();
+
         string levelName = _levelSceneNames[_currentLevelIndex];
 
         Debug.Log($"LevelMgr: Loading {levelName} additively");

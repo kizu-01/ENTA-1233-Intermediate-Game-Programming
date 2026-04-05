@@ -60,6 +60,7 @@ public class GameMgr : Singleton<GameMgr>
     /// </summary>
     public void StartGame()
     {
+        ResetScore();
         IsGameRunning = true;
     }
 

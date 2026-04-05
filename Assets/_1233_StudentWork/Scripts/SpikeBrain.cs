@@ -9,11 +9,13 @@ public class SpikeBrain : MonoBehaviour
     [SerializeField] private ContactDamage _contactDamage;
     [SerializeField] private EnemyAnimatorDriver _animatorDriver;
     [SerializeField] private Transform[] _patrolPoints;
+    [SerializeField] private EnemyAudioHandler _audio;
 
     [SerializeField] private GameObject explosionEffect;
     [SerializeField] private float explosionRadius = 5f;
     [SerializeField] private float explosionForce = 10f;
     [SerializeField] private int explosionDamage = 20;
+    [SerializeField] private AudioClip explosionSFX;
 
     public Transform[] PatrolPoints => _patrolPoints;
 
@@ -79,6 +81,8 @@ public class SpikeBrain : MonoBehaviour
             $"{info.Source?.name ?? "Unknown"} " +
             $"for {info.Amount} damage. " +
             $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+
+        _audio?.PlayHurt();
         _animatorDriver?.TriggerHit();
     }
 
@@ -86,6 +90,12 @@ public class SpikeBrain : MonoBehaviour
     {
         Debug.Log("[Spike] Died!");
         GameMgr.Instance.AddScore(100);
+
+        _audio?.PlayDeath();
+
+        // explosion sound
+        if (explosionSFX != null)
+            AudioSource.PlayClipAtPoint(explosionSFX, transform.position);
 
         if (_stateMachine != null) _stateMachine.enabled = false;
         if (_patrolMotor != null) _patrolMotor.enabled = false;

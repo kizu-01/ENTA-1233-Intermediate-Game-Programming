@@ -214,11 +214,14 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDamaged(DamageInfo info)
     {
+        _audioHandler?.PlayHurt();
+
         Debug.Log(
             $"[Player] Hit by " +
             $"{info.Source?.name ?? "Unknown"} " +
             $"for {info.Amount} damage. " +
             $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+
         _animator?.SetTrigger("Hit");
     }
 

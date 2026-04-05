@@ -16,6 +16,7 @@ public class SnakeAttackState : EnemyState
         _brain.Mover?.Stop();
         _brain.AnimatorDriver.SetSpeed(0);
         _brain.AnimatorDriver.TriggerAttack();
+        _brain.GetComponent<EnemyAudioHandler>()?.PlayAttack();
 
         // Calculate when we can leave this state
         _exitTime = Time.time + _brain.AttackCooldown;
