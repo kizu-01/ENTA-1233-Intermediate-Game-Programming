@@ -157,6 +157,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!context.performed) return;
 
+        if (!GameMgr.Instance.IsGameRunning) return;
+
         if (!IsGrounded()) return;
 
         _velocity = jumpPower;
@@ -240,5 +242,14 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         GameMgr.Instance.GameOver();
+    }
+
+    public void ResetVerticalVelocity()
+    {
+        // Only reset vertical part so player doesn’t fall or jump unexpectedly
+        _velocity = 0f;
+
+        // Also reset CharacterController move direction vertical
+        _moveDirection.y = 0f;
     }
 }

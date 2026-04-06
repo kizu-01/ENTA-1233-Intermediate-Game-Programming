@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 /// <summary>
@@ -91,18 +92,107 @@ public class GameMgr : Singleton<GameMgr>
     /// </summary>
     public void PauseGameToggle()
     {
+        var player = PlayerMgr.Instance?.PlayerObject;
+
         if (IsGameRunning)
         {
+            // --- PAUSE ---
             IsGameRunning = false;
-            // Open pause menu here
-            Debug.Log("Pause state enabled");
+            Time.timeScale = 0f;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            if (player != null)
+            {
+                var input = player.GetComponent<PlayerInput>();
+                if (input != null)
+                    input.enabled = false;
+
+                // Freeze player movement without messing up horizontal velocity
+                var rb = player.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                }
+
+                // Animator stays where it is; no extra triggers
+            }
+
+            UIMgr.Instance.HideMenu(GameMenus.InGameUI);
+            UIMgr.Instance.ShowMenu(GameMenus.PauseMenu);
         }
         else
         {
+            // --- RESUME ---
             IsGameRunning = true;
-            // Close pause menu here
-            Debug.Log("Pause state disabled");
+            Time.timeScale = 1f;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            if (player != null)
+            {
+                var input = player.GetComponent<PlayerInput>();
+                if (input != null)
+                    input.enabled = true;
+
+                // Reset vertical velocity only (horizontal movement stays)
+                var controller = player.GetComponent<PlayerController>();
+                if (controller != null)
+                    controller.ResetVerticalVelocity();
+
+                // Make sure Rigidbody doesn't carry any residual rotation/velocity
+                var rb = player.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.angularVelocity = Vector3.zero;
+                }
+
+                // Reset Animator to Locomotion without triggering Land/Jump
+                var animator = player.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.Play("Locomotion", 0, 0f); // start at normalizedTime = 0
+                }
+            }
+
+            // Handle UI only here
+            UIMgr.Instance.HideMenu(GameMenus.PauseMenu);
+            UIMgr.Instance.ShowMenu(GameMenus.InGameUI);
         }
     }
 
+    public void ResetGameState()
+    {
+        IsGameRunning = false;
+        ResetScore();
+        Time.timeScale = 1f;
+
+        var player = PlayerMgr.Instance?.PlayerObject;
+        if (player != null)
+        {
+            var input = player.GetComponent<PlayerInput>();
+            if (input != null)
+                input.enabled = true;
+
+            var rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            var animator = player.GetComponent<Animator>();
+            if (animator != null)
+                animator.Play("Locomotion", 0);
+
+            var controller = player.GetComponent<PlayerController>();
+            if (controller != null)
+                controller.ResetVerticalVelocity();
+        }
+
+        UIMgr.Instance.CloseAllMenus();
+    }
 }

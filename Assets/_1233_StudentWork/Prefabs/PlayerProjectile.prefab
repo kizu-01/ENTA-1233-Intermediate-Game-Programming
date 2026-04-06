@@ -189,7 +189,7 @@ PrefabInstance:
     - target: {fileID: 4468623184704865877, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
       propertyPath: impactEffect
       value: 
-      objectReference: {fileID: 5905344221410357982, guid: 1c07564493dd7634081e22f71b9427ad, type: 3}
+      objectReference: {fileID: 8228784164371057703, guid: 4c19a303bbc5f418aa6e60a3dfcd93ad, type: 3}
     - target: {fileID: 8553630054780480625, guid: 4c3eef83b72910245a0a333f4bca0e5d, type: 3}
       propertyPath: m_Layer
       value: 11

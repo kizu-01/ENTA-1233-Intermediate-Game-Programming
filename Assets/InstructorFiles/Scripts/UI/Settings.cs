@@ -11,6 +11,8 @@ public class Settings : MenuBase
 {
     [FormerlySerializedAs("BackButton")] [SerializeField] private Button _backButton;
 
+    private GameMenus _previousMenu;
+
     private void OnEnable()
     {
         _backButton.Select();
@@ -21,8 +23,19 @@ public class Settings : MenuBase
         return GameMenus.SettingsMenu;
     }
 
+    public void SetPreviousMenu(GameMenus menu)
+    {
+        _previousMenu = menu;
+    }
+
     public void Close()
     {
         UIMgr.Instance.HideMenu(GameMenus.SettingsMenu);
+
+        // Only reopen PauseMenu
+        if (_previousMenu == GameMenus.PauseMenu)
+        {
+            UIMgr.Instance.ShowMenu(GameMenus.PauseMenu);
+        }
     }
 }

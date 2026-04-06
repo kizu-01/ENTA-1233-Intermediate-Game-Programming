@@ -33,6 +33,10 @@ public class MainMenu : MenuBase
     public void ButtonSettings()
     {
         UIMgr.Instance.ShowMenu(GameMenus.SettingsMenu);
+
+        Settings settings = FindFirstObjectByType<Settings>();
+        if (settings != null)
+            settings.SetPreviousMenu(GameMenus.MainMenu);
     }
 
     public void ButtonQuit()
