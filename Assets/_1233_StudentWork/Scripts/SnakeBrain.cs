@@ -10,6 +10,7 @@ public class SnakeBrain : MonoBehaviour
     [SerializeField] private RotateToTarget _rotator;
     [SerializeField] private Health _health;
     [SerializeField] private EnemyAudioHandler _audio;
+    [SerializeField] private LayerMask obstacleMask;
 
     [Header("Settings")]
     [SerializeField] private float _attackRange = 2f;
@@ -92,5 +93,25 @@ public class SnakeBrain : MonoBehaviour
         enabled = false;
 
         Destroy(gameObject, 2f);
+    }
+
+    public bool HasLineOfSight(Transform target)
+    {
+        if (target == null) return false;
+
+        Vector3 origin = transform.position + Vector3.up * 1.5f;
+        Vector3 targetPos = target.position + Vector3.up * 1.2f;
+
+        Vector3 direction = (targetPos - origin).normalized;
+        float distance = Vector3.Distance(origin, targetPos);
+
+        Debug.DrawRay(origin, direction * distance, Color.red);
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, distance, obstacleMask))
+        {
+            return false; // blocked
+        }
+
+        return true;
     }
 }

@@ -31,6 +31,13 @@ public class SnakeAttackState : EnemyState
         var target = _brain.TargetProvider.GetTarget();
         if (target == null) return;
 
+        // Stop attacking if blocked
+        if (!_brain.HasLineOfSight(target))
+        {
+            Machine.ChangeState(new SnakeChaseState(_brain, Machine));
+            return;
+        }
+
         var targetPos = _brain.TargetProvider.GetTargetPosition();
         _brain.Rotator.FacePosition(targetPos);
 

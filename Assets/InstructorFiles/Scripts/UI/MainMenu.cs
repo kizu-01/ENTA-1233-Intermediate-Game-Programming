@@ -22,6 +22,7 @@ public class MainMenu : MenuBase
 
     public void ButtonStart()
     {
+        LevelMgr.Instance.ResetLevels();
         SceneMgr.Instance.LoadScene(GameScenes.Gameplay, GameMenus.InGameUI);
     }
 
@@ -42,5 +43,9 @@ public class MainMenu : MenuBase
     public void ButtonQuit()
     {
         Application.Quit();
+
+    #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+    #endif
     }
 }

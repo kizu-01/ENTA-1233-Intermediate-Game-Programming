@@ -68,6 +68,9 @@ public class LevelMgr : Singleton<LevelMgr>
 
         while (asyncOperation is {isDone: false}) yield return null;
 
+        Scene loadedScene = SceneManager.GetSceneByName(levelName);
+        SceneManager.SetActiveScene(loadedScene);
+
         Debug.Log("LevelMgr: Level loaded");
 
         IsLevelLoaded = true;
