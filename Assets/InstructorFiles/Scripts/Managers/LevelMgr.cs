@@ -17,6 +17,9 @@ public class LevelMgr : Singleton<LevelMgr>
     public string[] LevelSceneNames => _levelSceneNames;
 
     private int _currentLevelIndex;
+
+    public int CurrentLevelIndex => _currentLevelIndex;
+
     public bool IsLevelLoaded { get; private set; }
 
     public void SetCurrentLevel(int currentLevelIndex)

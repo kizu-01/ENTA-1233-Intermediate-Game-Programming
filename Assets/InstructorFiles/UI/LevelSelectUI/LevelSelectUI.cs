@@ -1,6 +1,7 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using static System.Net.Mime.MediaTypeNames;
 
 public class LevelSelectUI : MonoBehaviour
 {
@@ -24,7 +25,11 @@ public class LevelSelectUI : MonoBehaviour
 
             // Set button text
             var text = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-            text.text = "Level " + (index + 1);
+
+            string key = $"BestScore_Level_{index}";
+            float bestScore = PlayerPrefs.GetFloat(key, 0);
+
+            text.text = $"Level {index + 1}\nBest: {Mathf.RoundToInt(bestScore)}";
 
             // Set button click
             var button = buttonObj.GetComponent<Button>();
