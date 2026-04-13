@@ -15,7 +15,7 @@ public class GameMgr : Singleton<GameMgr>
     public override void Awake() {
         base.Awake();
     }*/
-    
+
     /// <summary>
     /// Are we actively in the gameplay state.
     /// Should the game loop be looping
@@ -96,7 +96,7 @@ public class GameMgr : Singleton<GameMgr>
 
         if (IsGameRunning)
         {
-            // --- PAUSE ---
+            // Pause game
             IsGameRunning = false;
             Time.timeScale = 0f;
 
@@ -125,7 +125,7 @@ public class GameMgr : Singleton<GameMgr>
         }
         else
         {
-            // --- RESUME ---
+            // Resume game
             IsGameRunning = true;
             Time.timeScale = 1f;
 
@@ -194,5 +194,20 @@ public class GameMgr : Singleton<GameMgr>
         }
 
         UIMgr.Instance.CloseAllMenus();
+    }
+
+    public void SaveBestScore()
+    {
+        int levelIndex = LevelMgr.Instance.CurrentLevelIndex;
+        float score = Score;
+
+        string key = $"BestScore_Level_{levelIndex}";
+        float best = PlayerPrefs.GetFloat(key, 0);
+
+        if (score > best)
+        {
+            PlayerPrefs.SetFloat(key, score);
+            PlayerPrefs.Save();
+        }
     }
 }

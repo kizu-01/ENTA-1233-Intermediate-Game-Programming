@@ -13,6 +13,7 @@ public class Settings : MenuBase
     [SerializeField] private Slider _masterSlider;
     [SerializeField] private Slider _soundSlider;
     [SerializeField] private Slider _musicSlider;
+    [SerializeField] private Toggle _fullscreenToggle;
 
     private GameMenus _previousMenu;
 
@@ -39,7 +40,8 @@ public class Settings : MenuBase
     {
         UIMgr.Instance.HideMenu(GameMenus.SettingsMenu);
 
-        if (_previousMenu == GameMenus.PauseMenu)
+        if (_previousMenu == GameMenus.PauseMenu &&
+        !IsMenuAlreadyOpen(GameMenus.PauseMenu))
         {
             UIMgr.Instance.ShowMenu(GameMenus.PauseMenu);
         }
@@ -60,5 +62,32 @@ public class Settings : MenuBase
     public void SetMusicVolume(float volume)
     {
         AudioMgr.Instance.MusicVolume = volume;
+    }
+
+    public void OnFullscreenToggleChanged()
+    {
+        bool wasPaused = Time.timeScale == 0;
+
+        Screen.fullScreen = !Screen.fullScreen;
+
+        Canvas.ForceUpdateCanvases();
+
+        if (wasPaused)
+        {
+            Time.timeScale = 0;
+        }
+    }
+
+    private bool IsMenuAlreadyOpen(GameMenus menu)
+    {
+        MenuBase[] menus = FindObjectsByType<MenuBase>(FindObjectsSortMode.None);
+
+        foreach (var m in menus)
+        {
+            if (m.MenuType() == menu && m.gameObject.activeInHierarchy)
+                return true;
+        }
+
+        return false;
     }
 }

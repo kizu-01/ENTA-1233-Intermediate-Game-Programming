@@ -13,6 +13,16 @@ public class LevelSelectUI : MonoBehaviour
         GenerateButtons();
     }
 
+    private void OnEnable()
+    {
+        foreach (Transform child in _buttonContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        GenerateButtons();
+    }
+
     private void GenerateButtons()
     {
         string[] levels = LevelMgr.Instance.LevelSceneNames;

@@ -21,7 +21,7 @@ public class ButtonSounds : MonoBehaviour
 
         if (_toggle) _toggle.onValueChanged.AddListener(PlayClickSound);
 
-        if (_slider) _slider.onValueChanged.AddListener(PlayClickSound);
+        // if (_slider) _slider.onValueChanged.AddListener(PlayClickSound);
     }
 
     /// <summary>
@@ -31,10 +31,12 @@ public class ButtonSounds : MonoBehaviour
     private void PlayClickSound(bool state)
     {
         // Ensures only one toggle in a group plays a sound
-        if (!_toggle) return;
-        if (!state && _toggle.group && _toggle.group.AnyTogglesOn()) return;
+        if (!state) return;
 
-        PlayClickSound(_clickSound);
+        if (_clickSound != null)
+            AudioMgr.Instance.PlaySound(_clickSound);
+        else
+            AudioMgr.Instance.PlaySound(AudioMgr.SoundTypes.ButtonSelect);
     }
 
     /// <summary>

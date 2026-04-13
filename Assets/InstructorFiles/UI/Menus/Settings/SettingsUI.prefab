@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 1837146163478974290}
   - component: {fileID: 890952524172895355}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: FullscreenToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,15 +238,15 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7759477483224727364}
         m_TargetAssemblyTypeName: Settings, Assembly-CSharp
-        m_MethodName: ToggleFullscreen
-        m_Mode: 6
+        m_MethodName: OnFullscreenToggleChanged
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
   m_IsOn: 1
 --- !u!114 &1837146163478974290
@@ -264,8 +264,8 @@ MonoBehaviour:
   _button: {fileID: 0}
   _toggle: {fileID: 1069065430130610279}
   _slider: {fileID: 0}
-  _clickSound: {fileID: 0}
-  _hoverSound: {fileID: 0}
+  _clickSound: {fileID: 8300000, guid: 0954cae6f37d85d4b89c439913315a3b, type: 3}
+  _hoverSound: {fileID: 8300000, guid: 05e6d54ef1befd342a5f796306f1e0cb, type: 3}
 --- !u!114 &890952524172895355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2642,6 +2642,7 @@ MonoBehaviour:
   _masterSlider: {fileID: 1616204922056100267}
   _soundSlider: {fileID: 2956150512774716819}
   _musicSlider: {fileID: 5220432572336385767}
+  _fullscreenToggle: {fileID: 1069065430130610279}
 --- !u!1 &8620323320878982635
 GameObject:
   m_ObjectHideFlags: 0
@@ -3160,6 +3161,30 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7147036899073817472, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 0.75686276
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147036899073817472, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.20392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147036899073817472, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147036899073817472, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147036899073817472, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.g
+      value: 0.9098039
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147036899073817472, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
+      propertyPath: m_Colors.m_HighlightedColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7147036899073817472, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -3187,6 +3212,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 7477449386200667618, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
+      propertyPath: _clickSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 0954cae6f37d85d4b89c439913315a3b, type: 3}
+    - target: {fileID: 7477449386200667618, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
+      propertyPath: _hoverSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 05e6d54ef1befd342a5f796306f1e0cb, type: 3}
     - target: {fileID: 9062268850994271006, guid: e0d6ad42ec9824eeab85aa7c923765b7, type: 3}
       propertyPath: m_text
       value: Back

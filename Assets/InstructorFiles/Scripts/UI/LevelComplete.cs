@@ -26,20 +26,8 @@ public class LevelComplete : MenuBase
         string key = $"BestScore_Level_{levelIndex}";
         float bestScore = PlayerPrefs.GetFloat(key, 0);
 
-        // Save best score
-        if (score > bestScore)
-        {
-            bestScore = score;
-            PlayerPrefs.SetFloat(key, bestScore);
-            PlayerPrefs.Save();
-        }
-
-        // Update UI text
-        if (_scoreText != null)
-            _scoreText.text = $"Score: {Mathf.RoundToInt(score)}";
-
-        if (_bestScoreText != null)
-            _bestScoreText.text = $"Best: {Mathf.RoundToInt(bestScore)}";
+        _scoreText.text = $"Score: {Mathf.RoundToInt(score)}";
+        _bestScoreText.text = $"Best: {Mathf.RoundToInt(bestScore)}";
 
         SetupNextButton(levelIndex);
     }
