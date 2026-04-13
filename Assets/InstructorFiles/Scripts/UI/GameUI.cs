@@ -1,4 +1,6 @@
-using System.Runtime.CompilerServices;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 
 /// <summary>
@@ -6,13 +8,74 @@ using System.Runtime.CompilerServices;
 /// </summary>
 public class GameUI : MenuBase
 {
+    [SerializeField] private TextMeshProUGUI _scoreText;
+
     public override GameMenus MenuType()
     {
         return GameMenus.InGameUI;
     }
 
+    [SerializeField] private Image _healthFillImage;
+
+    private Health _playerHealth;
+
     private void OnEnable()
     {
-        AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.Gameplay, 1);
+        if (PlayerMgr.Instance == null)
+        {
+            Debug.LogError("GameUI: PlayerMgr is null.");
+            return;
+        }
+
+        // if player was set already
+        if (PlayerMgr.Instance.HasSpawnedPlayer && PlayerMgr.Instance.PlayerObject != null)
+        {
+            HandlePlayerAssigned(PlayerMgr.Instance.PlayerObject);
+        }
+        else
+        {
+            PlayerMgr.Instance.OnPlayerAssigned += HandlePlayerAssigned;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (PlayerMgr.Instance != null) PlayerMgr.Instance.OnPlayerAssigned -= HandlePlayerAssigned;
+    }
+
+    private void Update()
+    {
+        if (_scoreText != null)
+        {
+            _scoreText.text = "Score: " + GameMgr.Instance.Score;
+        }
+    }
+
+    private void HandlePlayerAssigned(GameObject playerObject)
+    {
+        if (playerObject == null)
+        {
+            RefreshHealthBar(null);
+            return;
+        }
+
+        _playerHealth = playerObject.GetComponent<Health>();
+        if (_playerHealth == null)
+        {
+            Debug.LogError("GameUI: Player object does not have a Health component.");
+            return;
+        }
+
+        _playerHealth.OnHealthChanged += RefreshHealthBar;
+        RefreshHealthBar(_playerHealth);
+    }
+
+    private void RefreshHealthBar(Health health)
+    {
+        Debug.Log("UI updating: " + (health != null ? health.NormalizedHealth : 0f));
+
+        if (_healthFillImage == null) return;
+
+        _healthFillImage.fillAmount = health != null ? health.NormalizedHealth : 0f;
     }
 }

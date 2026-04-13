@@ -6,6 +6,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void Update()
     {
+        if (!enabled) return;
         _currentState?.Tick();
     }
 

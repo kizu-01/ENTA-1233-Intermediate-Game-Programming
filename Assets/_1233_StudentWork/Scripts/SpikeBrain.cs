@@ -85,6 +85,7 @@ public class SpikeBrain : MonoBehaviour
     private void HandleDied()
     {
         Debug.Log("[Spike] Died!");
+        GameMgr.Instance.AddScore(100);
 
         if (_stateMachine != null) _stateMachine.enabled = false;
         if (_patrolMotor != null) _patrolMotor.enabled = false;

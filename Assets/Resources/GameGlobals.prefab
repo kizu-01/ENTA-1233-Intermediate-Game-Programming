@@ -575,6 +575,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 8524240638639900879}
     m_Modifications:
     - target: {fileID: 4627058941732817289, guid: 275b2fcd5e9d84cab82c4650ca486b5a, type: 3}
+      propertyPath: _levelSelectMenuPrefab
+      value: 
+      objectReference: {fileID: 5812993580496314533, guid: c20b9958dcb1cbe4d85ea4f16394e214, type: 3}
+    - target: {fileID: 4627058941732817289, guid: 275b2fcd5e9d84cab82c4650ca486b5a, type: 3}
       propertyPath: _levelCompleteMenuPrefab
       value: 
       objectReference: {fileID: 3694091093083164182, guid: 66097caee96326944b508b5c44dccf99, type: 3}
