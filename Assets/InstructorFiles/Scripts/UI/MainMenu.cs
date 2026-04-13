@@ -15,6 +15,17 @@ public class MainMenu : MenuBase
         return GameMenus.MainMenu;
     }
 
+    void Awake()
+    {
+        // For presentation purposes only
+        if (!Application.isEditor)
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
+            Debug.Log("All scores cleared.");
+        }
+    }
+
     private void OnEnable()
     {
         AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.MainMenu, 1);

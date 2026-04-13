@@ -23,13 +23,40 @@ public class LevelComplete : MenuBase
         float score = GameMgr.Instance.Score;
         int levelIndex = LevelMgr.Instance.CurrentLevelIndex;
 
+        int highestUnlocked = PlayerPrefs.GetInt("HighestUnlockedLevel", 0);
+        if (levelIndex == highestUnlocked)
+        {
+            // If Level 1 finished, unlock Level 2
+            PlayerPrefs.SetInt("HighestUnlockedLevel", levelIndex + 1);
+            PlayerPrefs.Save();
+        }
+
         string key = $"BestScore_Level_{levelIndex}";
         float bestScore = PlayerPrefs.GetFloat(key, 0);
 
+        if (score > bestScore)
+        {
+            PlayerPrefs.SetFloat(key, score);
+            bestScore = score;
+        }
+            
         _scoreText.text = $"Score: {Mathf.RoundToInt(score)}";
         _bestScoreText.text = $"Best: {Mathf.RoundToInt(bestScore)}";
 
         SetupNextButton(levelIndex);
+    }
+
+    private void UnlockNextLevel(int currentLevelIndex)
+    {
+        // Get the highest level currently unlocked (default is 0 for Level 1)
+        int highestUnlocked = PlayerPrefs.GetInt("HighestUnlockedLevel", 0);
+
+        // If finished highest level, unlock the next one
+        if (currentLevelIndex == highestUnlocked)
+        {
+            PlayerPrefs.SetInt("HighestUnlockedLevel", currentLevelIndex + 1);
+            PlayerPrefs.Save();
+        }
     }
 
     private void SetupNextButton(int levelIndex)
