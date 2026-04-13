@@ -15,6 +15,17 @@ public class MainMenu : MenuBase
         return GameMenus.MainMenu;
     }
 
+    void Awake()
+    {
+        // For presentation purposes only
+        if (!Application.isEditor)
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
+            Debug.Log("All scores cleared.");
+        }
+    }
+
     private void OnEnable()
     {
         AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.MainMenu, 1);
@@ -22,6 +33,7 @@ public class MainMenu : MenuBase
 
     public void ButtonStart()
     {
+        LevelMgr.Instance.ResetLevels();
         SceneMgr.Instance.LoadScene(GameScenes.Gameplay, GameMenus.InGameUI);
     }
 
@@ -33,10 +45,18 @@ public class MainMenu : MenuBase
     public void ButtonSettings()
     {
         UIMgr.Instance.ShowMenu(GameMenus.SettingsMenu);
+
+        Settings settings = FindFirstObjectByType<Settings>();
+        if (settings != null)
+            settings.SetPreviousMenu(GameMenus.MainMenu);
     }
 
     public void ButtonQuit()
     {
         Application.Quit();
+
+    #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+    #endif
     }
 }

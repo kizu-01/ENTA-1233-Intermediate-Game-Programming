@@ -38,7 +38,7 @@ public class PlayerAttack : MonoBehaviour
             Vector3 targetPoint = GetTargetPoint(target);
 
             // Instantly face the target
-            FaceTargetInstant(targetPoint);
+            // FaceTargetInstant(targetPoint);
 
             // Shoot directly at target
             direction = (targetPoint - firePoint.position).normalized;
@@ -46,7 +46,7 @@ public class PlayerAttack : MonoBehaviour
         else
         {
             // fallback if no enemy
-            direction = firePoint.forward;
+            direction = transform.forward;
         }
 
         FireProjectile(direction);
@@ -131,5 +131,9 @@ public class PlayerAttack : MonoBehaviour
     public bool HasTarget()
     {
         return FindClosestEnemy() != null;
+    }
+    public Transform GetTarget()
+    {
+        return FindClosestEnemy();
     }
 }

@@ -16,6 +16,7 @@ public class SnakeAttackState : EnemyState
         _brain.Mover?.Stop();
         _brain.AnimatorDriver.SetSpeed(0);
         _brain.AnimatorDriver.TriggerAttack();
+        _brain.GetComponent<EnemyAudioHandler>()?.PlayAttack();
 
         // Calculate when we can leave this state
         _exitTime = Time.time + _brain.AttackCooldown;
@@ -29,6 +30,13 @@ public class SnakeAttackState : EnemyState
         // Keep facing the player during the attack
         var target = _brain.TargetProvider.GetTarget();
         if (target == null) return;
+
+        // Stop attacking if blocked
+        if (!_brain.HasLineOfSight(target))
+        {
+            Machine.ChangeState(new SnakeChaseState(_brain, Machine));
+            return;
+        }
 
         var targetPos = _brain.TargetProvider.GetTargetPosition();
         _brain.Rotator.FacePosition(targetPos);

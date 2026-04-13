@@ -11,6 +11,7 @@ public class BloomBrain : MonoBehaviour
     [SerializeField] private Health _health;
     [SerializeField] private ProjectileWeapon _weapon;
     [SerializeField] public Transform WeaponOrigin;
+    [SerializeField] private EnemyAudioHandler _audio;
 
     [Header("Settings")]
     [SerializeField] private float _attackRange = 10f;
@@ -65,12 +66,16 @@ public class BloomBrain : MonoBehaviour
             $"{info.Source?.name ?? "Unknown"} " +
             $"for {info.Amount} damage. " +
             $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+
+        _audio?.PlayHurt();
         _animatorDriver?.TriggerHit();
     }
 
     private void HandleDied()
     {
         GameMgr.Instance.AddScore(200);
+
+        _audio?.PlayDeath();
 
         if (_stateMachine != null)
             _stateMachine.enabled = false;
@@ -81,8 +86,11 @@ public class BloomBrain : MonoBehaviour
             Mover.SetEnabled(false);
         }
 
-        _animatorDriver.TriggerDie();
         _weapon.enabled = false;
+
+        _animatorDriver.SetSpeed(0);
+        _animatorDriver.TriggerDie();
+
         enabled = false;
 
         Destroy(gameObject, 2f);

@@ -94,10 +94,33 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyRotation()
     {
-        if (_moveDirection.sqrMagnitude == 0) return;
-
+        // If there's a target, smoothly rotate to it
         if (_playerAttack != null && _playerAttack.HasTarget())
+        {
+            Transform target = _playerAttack.GetTarget();
+
+            if (target != null)
+            {
+                Vector3 direction = (target.position - transform.position).normalized;
+                direction.y = 0f;
+
+                if (direction.sqrMagnitude > 0.01f)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+                    transform.rotation = Quaternion.Lerp(
+                        transform.rotation,
+                        targetRotation,
+                        10f * Time.deltaTime
+                    );
+                }
+            }
+
             return;
+        }
+
+        // Normal movement rotation
+        if (_moveDirection.sqrMagnitude == 0) return;
 
         float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.z) * Mathf.Rad2Deg;
 
@@ -133,6 +156,8 @@ public class PlayerController : MonoBehaviour
     public void Jump(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
+
+        if (!GameMgr.Instance.IsGameRunning) return;
 
         if (!IsGrounded()) return;
 
@@ -191,11 +216,14 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDamaged(DamageInfo info)
     {
+        _audioHandler?.PlayHurt();
+
         Debug.Log(
             $"[Player] Hit by " +
             $"{info.Source?.name ?? "Unknown"} " +
             $"for {info.Amount} damage. " +
             $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+
         _animator?.SetTrigger("Hit");
     }
 
@@ -214,5 +242,14 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         GameMgr.Instance.GameOver();
+    }
+
+    public void ResetVerticalVelocity()
+    {
+        // Only reset vertical part so player doesn’t fall or jump unexpectedly
+        _velocity = 0f;
+
+        // Also reset CharacterController move direction vertical
+        _moveDirection.y = 0f;
     }
 }

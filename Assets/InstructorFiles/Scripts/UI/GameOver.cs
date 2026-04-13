@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 
@@ -7,11 +8,20 @@ using UnityEngine;
 /// </summary>
 public class GameOver : MenuBase
 {
+    [SerializeField] private TextMeshProUGUI _scoreText;
+
     void OnEnable()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
         AudioMgr.Instance.PlayMusic(AudioMgr.MusicTypes.GameOver, 2);
+
+        if (_scoreText != null)
+        {
+            float score = GameMgr.Instance.Score;
+            _scoreText.text = $"Score: {Mathf.RoundToInt(score)}";
+        }
     }
 
     public override GameMenus MenuType()

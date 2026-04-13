@@ -6,6 +6,7 @@ public class PlayerAudioHandler : MonoBehaviour
     [SerializeField] private AudioSource jumpSource;
     [SerializeField] private AudioSource landSource;
     [SerializeField] private AudioSource attackSource;
+    [SerializeField] private AudioSource hurtSource;
 
     public void PlayFootstep()
     {
@@ -29,5 +30,10 @@ public class PlayerAudioHandler : MonoBehaviour
     {
         if (attackSource != null)
             attackSource.Play();
+    }
+
+    public void PlayHurt()
+    {
+        hurtSource?.Play();
     }
 }

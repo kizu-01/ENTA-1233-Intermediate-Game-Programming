@@ -1,20 +1,34 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using static System.Net.Mime.MediaTypeNames;
 
 public class LevelSelectUI : MonoBehaviour
 {
     [SerializeField] private Transform _buttonContainer;
     [SerializeField] private GameObject _buttonPrefab;
 
+    /*
     private void Start()
     {
+        GenerateButtons();
+    }
+    */
+
+    private void OnEnable()
+    {
+        foreach (Transform child in _buttonContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
         GenerateButtons();
     }
 
     private void GenerateButtons()
     {
         string[] levels = LevelMgr.Instance.LevelSceneNames;
+        int highestUnlocked = PlayerPrefs.GetInt("HighestUnlockedLevel", 0);
 
         for (int i = 0; i < levels.Length; i++)
         {
@@ -24,14 +38,29 @@ public class LevelSelectUI : MonoBehaviour
 
             // Set button text
             var text = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-            text.text = "Level " + (index + 1);
-
-            // Set button click
             var button = buttonObj.GetComponent<Button>();
-            button.onClick.AddListener(() =>
+
+            // Check if level unlocked
+            if (i <= highestUnlocked)
             {
-                OnLevelSelected(index);
-            });
+                // Unlocked level
+                string key = $"BestScore_Level_{index}";
+                float bestScore = PlayerPrefs.GetFloat(key, 0);
+
+                text.text = $"Level {index + 1}\nBest: {Mathf.RoundToInt(bestScore)}";
+                button.interactable = true; // Make sure the button can be clicked
+
+                button.onClick.AddListener(() =>
+                {
+                    OnLevelSelected(index);
+                });
+            }
+            else
+            {
+                // Locked level
+                text.text = $"Level {index + 1}\nLocked";
+                button.interactable = false; // This greys out the button automatically
+            }
         }
     }
 

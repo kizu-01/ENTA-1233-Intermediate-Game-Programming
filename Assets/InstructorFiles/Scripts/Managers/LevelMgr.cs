@@ -17,6 +17,9 @@ public class LevelMgr : Singleton<LevelMgr>
     public string[] LevelSceneNames => _levelSceneNames;
 
     private int _currentLevelIndex;
+
+    public int CurrentLevelIndex => _currentLevelIndex;
+
     public bool IsLevelLoaded { get; private set; }
 
     public void SetCurrentLevel(int currentLevelIndex)
@@ -56,6 +59,8 @@ public class LevelMgr : Singleton<LevelMgr>
 
     private IEnumerator LoadLevelRoutine()
     {
+        GameMgr.Instance.ResetScore();
+
         string levelName = _levelSceneNames[_currentLevelIndex];
 
         Debug.Log($"LevelMgr: Loading {levelName} additively");
@@ -65,6 +70,9 @@ public class LevelMgr : Singleton<LevelMgr>
                 levelName, LoadSceneMode.Additive);
 
         while (asyncOperation is {isDone: false}) yield return null;
+
+        Scene loadedScene = SceneManager.GetSceneByName(levelName);
+        SceneManager.SetActiveScene(loadedScene);
 
         Debug.Log("LevelMgr: Level loaded");
 
