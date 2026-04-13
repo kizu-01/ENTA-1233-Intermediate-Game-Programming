@@ -11,31 +11,52 @@ public class PlayerController : MonoBehaviour
 
     private bool _wasGrounded;
     private bool _jumpRequested;
+    public bool IsAttacking { get; private set; }
 
-    [SerializeField] private float smoothTime = 0.05f;
     private float _currentVelocity;
 
     [SerializeField] private float speed;
-    [SerializeField] private float gravityMultiplier = 3.0f;
+    [SerializeField] private float gravityMultiplier = 1.5f;
     private float _gravity = -9.81f;
     private float _velocity;
 
     [SerializeField] private float jumpPower;
-    private int _numberOfJumps;
-    [SerializeField] private int maxNumberOfJumps = 2;
+    [SerializeField] private PlayerAudioHandler _audioHandler;
 
     [SerializeField] private Animator _animator;
+    [SerializeField] private Health _health;
+    [SerializeField] private PlayerAttack _playerAttack;
+
+    private Vector3 _moveDirection;
+    [SerializeField] private Transform orientation;
 
     // Animator hashes
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
     private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
-    private static readonly int JumpHash = Animator.StringToHash("Jump");
-    private static readonly int LandHash = Animator.StringToHash("Land");
 
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _wasGrounded = IsGrounded();
+        if (_health == null) _health = GetComponent<Health>();
+    }
+
+    private void OnEnable()
+    {
+        if (_health != null)
+        {
+            _health.OnDamaged += HandleDamaged;
+            _health.OnDied += HandleDied;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (_health != null)
+        {
+            _health.OnDamaged -= HandleDamaged;
+            _health.OnDied -= HandleDied;
+        }
     }
 
     private void Update()
@@ -44,7 +65,6 @@ public class PlayerController : MonoBehaviour
         ApplyRotation();
         ApplyMovement();
 
-        HandleJump();
         HandleLanding();
         UpdateAnimatorParameters();
     }
@@ -54,31 +74,56 @@ public class PlayerController : MonoBehaviour
     private void ApplyGravity()
     {
         if (IsGrounded() && _velocity < 0f)
-            _velocity = -1f; // stick to ground
+        {
+            _velocity = -2f;
+        }
         else
-            _velocity += _gravity * gravityMultiplier * Time.deltaTime;
-
-        _direction.y = _velocity;
+        {
+            if (_velocity > 0)
+            {
+                // going up
+                _velocity += _gravity * gravityMultiplier * Time.deltaTime;
+            }
+            else
+            {
+                // falling
+                _velocity += _gravity * gravityMultiplier * 3.0f * Time.deltaTime;
+            }
+        }
     }
 
     private void ApplyRotation()
     {
-        if (_input.sqrMagnitude == 0) return;
+        if (_moveDirection.sqrMagnitude == 0) return;
 
-        float targetAngle = Mathf.Atan2(_direction.x, _direction.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _currentVelocity, smoothTime);
-        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+        if (_playerAttack != null && _playerAttack.HasTarget())
+            return;
+
+        float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.z) * Mathf.Rad2Deg;
+
+        transform.rotation = Quaternion.Lerp(
+            transform.rotation,
+            Quaternion.Euler(0f, targetAngle, 0f),
+            15f * Time.deltaTime
+        );
     }
 
     private void ApplyMovement()
     {
-        _characterController.Move(_direction * speed * Time.deltaTime);
+        Vector3 finalMove = _moveDirection * speed;
+        finalMove.y = _velocity;
+
+        _characterController.Move(finalMove * Time.deltaTime);
     }
 
     public void Move(InputAction.CallbackContext context)
     {
         _input = context.ReadValue<Vector2>();
-        _direction = new Vector3(_input.x, 0f, _input.y);
+        Vector3 moveRaw = new(_input.x, 0, _input.y);
+        Camera camera = CameraMgr.Instance._mainCamera;
+        Vector3 forward = Vector3.Cross(camera.transform.right, Vector3.up);
+        Quaternion quat = Quaternion.LookRotation(forward, camera.transform.up);
+        _moveDirection = quat * moveRaw;
     }
 
     #endregion
@@ -87,34 +132,34 @@ public class PlayerController : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.started && (IsGrounded() || _numberOfJumps < maxNumberOfJumps))
-            _jumpRequested = true;
-    }
+        if (!context.performed) return;
 
-    private void HandleJump()
-    {
-        if (!_jumpRequested) return;
-        _jumpRequested = false;
+        if (!IsGrounded()) return;
 
-        if (!IsGrounded() && _numberOfJumps >= maxNumberOfJumps)
-            return;
-
-        _numberOfJumps++;
         _velocity = jumpPower;
 
-        _animator.SetTrigger(JumpHash);
-
-        // Track landing only on first jump
-        if (_numberOfJumps == 1)
-            StartCoroutine(WaitForLanding());
+        _animator?.SetTrigger("Jump");
+        _animator.SetBool("IsJumping", true);
+        _audioHandler?.PlayJump();
     }
 
-    private IEnumerator WaitForLanding()
+    public void Attack(InputAction.CallbackContext context)
     {
-        yield return new WaitUntil(() => !IsGrounded());
-        yield return new WaitUntil(IsGrounded);
+        if (!context.started) return;
 
-        _numberOfJumps = 0; // reset jumps after landing
+        IsAttacking = true;
+
+        _animator?.SetTrigger("Attack");
+        _playerAttack?.TryAttack();
+        _audioHandler?.PlayAttack();
+
+        StartCoroutine(ResetAttackFlag());
+    }
+
+    private IEnumerator ResetAttackFlag()
+    {
+        yield return new WaitForSeconds(0.2f);
+        IsAttacking = false;
     }
 
     #endregion
@@ -133,13 +178,41 @@ public class PlayerController : MonoBehaviour
 
         if (!_wasGrounded && grounded)
         {
-            _animator.SetTrigger(LandHash);
+            _animator.SetTrigger("Land");
         }
 
         _wasGrounded = grounded;
+        _animator.SetBool("IsJumping", false);
     }
 
     #endregion
 
     private bool IsGrounded() => _characterController.isGrounded;
+
+    private void HandleDamaged(DamageInfo info)
+    {
+        Debug.Log(
+            $"[Player] Hit by " +
+            $"{info.Source?.name ?? "Unknown"} " +
+            $"for {info.Amount} damage. " +
+            $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+        _animator?.SetTrigger("Hit");
+    }
+
+    private void HandleDied()
+    {
+        Debug.Log("[Player] Died!");
+        _animator?.SetTrigger("Die");
+        _animator = null;
+        _characterController = null;
+        enabled = false;
+
+        StartCoroutine(GameOverTransition());
+    }
+
+    private IEnumerator GameOverTransition()
+    {
+        yield return new WaitForSeconds(2);
+        GameMgr.Instance.GameOver();
+    }
 }

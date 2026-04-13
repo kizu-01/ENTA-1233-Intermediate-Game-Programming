@@ -6,6 +6,8 @@ public class CameraAutoBind : MonoBehaviour
 {
     public CinemachineCamera followCam;
     public CinemachineCamera altCam;
+    public CinemachineCamera altCam2;
+    public CinemachineCamera altCam3;
 
     private void Start()
     {
@@ -28,14 +30,24 @@ public class CameraAutoBind : MonoBehaviour
         {
             followCam.Follow = player.transform;
             followCam.LookAt = player.transform;
-            Debug.Log("FollowCamera bound to player.");
         }
 
         if (altCam != null)
         {
             altCam.Follow = player.transform;
             altCam.LookAt = player.transform;
-            Debug.Log("AltCamera bound to player.");
+        }
+
+        if (altCam2 != null)
+        {
+            altCam.Follow = player.transform;
+            altCam.LookAt = player.transform;
+        }
+
+        if (altCam3 != null)
+        {
+            altCam.Follow = player.transform;
+            altCam.LookAt = player.transform;
         }
     }
 }

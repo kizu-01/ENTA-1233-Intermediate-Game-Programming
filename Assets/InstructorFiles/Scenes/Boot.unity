@@ -352,11 +352,11 @@ PrefabInstance:
     - target: {fileID: 1128344560038140083, guid: 931c026d2c7d4406f9ea4ce1972673d4, type: 3}
       propertyPath: '_reusableMusicClips.Array.data[0]'
       value: 
-      objectReference: {fileID: 8300000, guid: b9ddd035ca2e5e74bbfa4e657320a574, type: 3}
+      objectReference: {fileID: 8300000, guid: 84747d1c8faf55c4f96466819375d84c, type: 3}
     - target: {fileID: 1128344560038140083, guid: 931c026d2c7d4406f9ea4ce1972673d4, type: 3}
       propertyPath: '_reusableMusicClips.Array.data[1]'
       value: 
-      objectReference: {fileID: 8300000, guid: 8e9872581323c1549a34ebffc2f305c7, type: 3}
+      objectReference: {fileID: 8300000, guid: 02e1a8b7b928b1c46a818526b49ec669, type: 3}
     - target: {fileID: 1329162700049067374, guid: 931c026d2c7d4406f9ea4ce1972673d4, type: 3}
       propertyPath: _levelCompleteMenuPrefab
       value: 
@@ -364,7 +364,7 @@ PrefabInstance:
     - target: {fileID: 1961049829362052442, guid: 931c026d2c7d4406f9ea4ce1972673d4, type: 3}
       propertyPath: m_Resource
       value: 
-      objectReference: {fileID: 8300000, guid: b9ddd035ca2e5e74bbfa4e657320a574, type: 3}
+      objectReference: {fileID: 8300000, guid: 84747d1c8faf55c4f96466819375d84c, type: 3}
     - target: {fileID: 1961049829362052442, guid: 931c026d2c7d4406f9ea4ce1972673d4, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0

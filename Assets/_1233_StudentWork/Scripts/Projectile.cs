@@ -19,7 +19,6 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Projectile hit: " + collision.gameObject.name);
 
         // Don't hit the source
         if (collision.gameObject == _source) return;
@@ -38,8 +37,8 @@ public class Projectile : MonoBehaviour
             damageReceiver.ApplyDamage(info);
         }
 
-        // Destroy on impact
-        Destroy(gameObject);
+            // Destroy on impact
+            Destroy(gameObject);
     }
 
     public void Launch(Vector3 direction, GameObject source)
@@ -53,6 +52,11 @@ public class Projectile : MonoBehaviour
     public void LaunchWithVelocity(Vector3 velocity, GameObject source)
     {
         _source = source;
+        if (float.IsNaN(velocity.x) || float.IsNaN(velocity.y) || float.IsNaN(velocity.z))
+        {
+            Debug.LogWarning("Projectile velocity invalid. Aborting shot.");
+            return;
+        }
         _rb.linearVelocity = velocity;
         if (velocity.sqrMagnitude > 0.001f)
             transform.forward = velocity;

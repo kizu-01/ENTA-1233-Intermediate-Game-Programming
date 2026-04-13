@@ -19,8 +19,6 @@ public class ContactDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Spike triggered: " + other.name);
-
         TryApplyDamage(other.gameObject);
     }
 
@@ -33,7 +31,19 @@ public class ContactDamage : MonoBehaviour
     {
         if (Time.time < _nextDamageTime) return;
 
-        var damageReceiver = target.GetComponent<IDamageReceiver>();
+        var components = target.GetComponentsInParent<MonoBehaviour>();
+
+        IDamageReceiver damageReceiver = null;
+
+        foreach (var comp in components)
+        {
+            if (comp is IDamageReceiver receiver)
+            {
+                damageReceiver = receiver;
+                break;
+            }
+        }
+
         if (damageReceiver != null)
         {
             var info = new DamageInfo
@@ -43,8 +53,11 @@ public class ContactDamage : MonoBehaviour
                 HitPoint = target.transform.position,
                 HitNormal = Vector3.up
             };
+
             damageReceiver.ApplyDamage(info);
+
             _nextDamageTime = Time.time + _cooldown;
+
             Debug.Log($"[ContactDamage] Damaged {target.name} for {_damage}");
         }
     }

@@ -62,7 +62,7 @@ public class GameMgr : Singleton<GameMgr>
     {
         IsGameRunning = true;
     }
-    
+
     /// <summary>
     /// Handle the result of the game ending
     /// </summary>

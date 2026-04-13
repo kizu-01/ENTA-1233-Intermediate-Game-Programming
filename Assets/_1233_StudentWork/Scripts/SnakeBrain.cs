@@ -41,16 +41,37 @@ public class SnakeBrain : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_health != null) _health.OnDied += HandleDied;
+        if (_health != null)
+        {
+            _health.OnDamaged += HandleDamaged;
+            _health.OnDied += HandleDied;
+        }
     }
 
     private void OnDisable()
     {
-        if (_health != null) _health.OnDied -= HandleDied;
+        if (_health != null)
+        {
+            _health.OnDamaged -= HandleDamaged;
+            _health.OnDied -= HandleDied;
+        }
+    }
+
+    private void HandleDamaged(DamageInfo info)
+    {
+        Debug.Log(
+            $"[Snake] Hit by " +
+            $"{info.Source?.name ?? "Unknown"} " +
+            $"for {info.Amount} damage. " +
+            $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+        _animatorDriver?.TriggerHit();
     }
 
     private void HandleDied()
     {
+        if (_stateMachine != null)
+            _stateMachine.enabled = false;
+
         _stateMachine.ChangeState(null);
         if (Mover != null)
         {
@@ -60,5 +81,7 @@ public class SnakeBrain : MonoBehaviour
 
         _animatorDriver.TriggerDie();
         enabled = false;
+
+        Destroy(gameObject, 2f);
     }
 }

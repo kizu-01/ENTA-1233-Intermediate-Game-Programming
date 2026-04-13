@@ -16,8 +16,16 @@ public class BloomMoveState : EnemyState
         var target = _brain.TargetProvider.GetTarget();
         if (target == null) return;
 
+        if (!_brain.Detection.IsTargetInDetectionRange(target))
+        {
+            // Player too far: stop moving
+            _brain.Mover?.Stop();
+            _brain.AnimatorDriver.SetSpeed(0);
+            return;
+        }
+
         var distance = Vector3.Distance(_brain.transform.position, target.position);
-        var hasLOS = _brain.Detection.HasLineOfSight(target);
+        var hasLOS = _brain.Detection.HasLineOfSight(target, _brain.TargetProvider.GetOffset());
 
         // 2. If we have LOS and are in range, switch to Attack state
         if (hasLOS && distance <= _brain.AttackRange)

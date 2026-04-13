@@ -42,17 +42,37 @@ public class BloomBrain : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_health != null) _health.OnDied += HandleDied;
+        if (_health != null)
+        {
+            _health.OnDamaged += HandleDamaged;
+            _health.OnDied += HandleDied;
+        }
     }
 
     private void OnDisable()
     {
-        if (_health != null) _health.OnDied += HandleDied;
+        if (_health != null)
+        {
+            _health.OnDamaged -= HandleDamaged;
+            _health.OnDied -= HandleDied;
+        }
+    }
+
+    private void HandleDamaged(DamageInfo info)
+    {
+        Debug.Log(
+            $"[Bloom] Hit by " +
+            $"{info.Source?.name ?? "Unknown"} " +
+            $"for {info.Amount} damage. " +
+            $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+        _animatorDriver?.TriggerHit();
     }
 
     private void HandleDied()
     {
-        _stateMachine.ChangeState(null);
+        if (_stateMachine != null)
+            _stateMachine.enabled = false;
+
         if (Mover != null)
         {
             Mover.Stop();
@@ -60,6 +80,9 @@ public class BloomBrain : MonoBehaviour
         }
 
         _animatorDriver.TriggerDie();
+        _weapon.enabled = false;
         enabled = false;
+
+        Destroy(gameObject, 2f);
     }
 }

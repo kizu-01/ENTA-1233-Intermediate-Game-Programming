@@ -58,12 +58,20 @@ public class BudBrain : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_health != null) _health.OnDied += HandleDied;
+        if (_health != null)
+        {
+            _health.OnDamaged += HandleDamaged;
+            _health.OnDied += HandleDied;
+        }
     }
 
     private void OnDisable()
     {
-        if (_health != null) _health.OnDied -= HandleDied;
+        if (_health != null)
+        {
+            _health.OnDamaged -= HandleDamaged;
+            _health.OnDied -= HandleDied;
+        }
     }
 
     private void HandleDirectAim()
@@ -72,7 +80,7 @@ public class BudBrain : MonoBehaviour
 
         var target = _targetProvider.GetTarget();
         var targetPos = _targetProvider.GetTargetPosition();
-        if (_detection.IsTargetInDetectionRange(target) && _detection.HasLineOfSight(target))
+        if (_detection.IsTargetInDetectionRange(target) && _detection.HasLineOfSight(target, _targetProvider.GetOffset()))
         {
             _rotator?.FacePosition(targetPos);
             if (_weapon.CanFire)
@@ -88,8 +96,10 @@ public class BudBrain : MonoBehaviour
         if (_targetProvider == null || !_targetProvider.HasTarget) return;
 
         var target = _targetProvider.GetTarget();
+        if (target == null) return;
+
         var targetPos = _targetProvider.GetTargetPosition();
-        if (_detection.IsTargetInDetectionRange(target) && _detection.HasLineOfSight(target))
+        if (_detection.IsTargetInDetectionRange(target) && _detection.HasLineOfSight(target, _targetProvider.GetOffset()))
         {
             _rotator?.FacePosition(targetPos);
             if (_weapon.CanFire)
@@ -100,9 +110,24 @@ public class BudBrain : MonoBehaviour
         }
     }
 
+    private void HandleDamaged(DamageInfo info)
+    {
+        Debug.Log(
+            $"[Bud] Hit by " +
+            $"{info.Source?.name ?? "Unknown"} " +
+            $"for {info.Amount} damage. " +
+            $"HP: {_health.CurrentHealth}/{_health.MaxHealth}");
+        _animator?.TriggerHit();
+    }
+
     private void HandleDied()
     {
-        // Stop firing, maybe play an effect
+        Debug.Log("[Bud] Died!");
+
         enabled = false;
+
+        _animator.TriggerDie();
+
+        Destroy(gameObject, 3f);
     }
 }

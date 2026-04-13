@@ -48,7 +48,6 @@ public class TrainingDummyBrain : MonoBehaviour
     private void HandleDied()
     {
         Debug.Log("[Dummy] Died!");
-        Debug.Log($"HandleDied called at {Time.time}, activeSelf: {gameObject.activeSelf}");
 
         _animatorDriver.TriggerDie();
 

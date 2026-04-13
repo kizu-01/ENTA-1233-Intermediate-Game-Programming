@@ -29,10 +29,10 @@ public class BloomAttackState : EnemyState
         }
 
         var distance = Vector3.Distance(_brain.transform.position, target.position);
-        var hasLOS = _brain.Detection.HasLineOfSight(target);
+        var hasLOS = _brain.Detection.HasLineOfSight(target, _brain.TargetProvider.GetOffset());
 
         // 2. If LOS is lost or we are out of range, go back to Move state
-        if (!hasLOS || distance > _brain.AttackRange)
+        if (!_brain.Detection.IsTargetInDetectionRange(target) || !hasLOS || distance > _brain.AttackRange)
         {
             Machine.ChangeState(new BloomMoveState(_brain, Machine));
             return;

@@ -21,7 +21,7 @@ public class LevelMgr : Singleton<LevelMgr>
     {
         if (_currentLevelIndex >= _levelSceneNames.Length)
         {
-            Debug.Log("No more levels.");
+            Debug.Log("No more levels");
             return;
         }
         StartCoroutine(LoadNextLevelRoutine());
@@ -63,4 +63,9 @@ public class LevelMgr : Singleton<LevelMgr>
 
         IsLevelLoaded = true;
     }
+
+    public void ResetLevels()
+{
+    _currentLevelIndex = 0;
+}
 }
