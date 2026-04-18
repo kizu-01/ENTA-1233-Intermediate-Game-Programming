@@ -11,7 +11,69 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private LayerMask obstacleLayer;
 
+    [Header("Target Indicator")]
+    [SerializeField] private GameObject indicatorPrefab;
+    [SerializeField] private float moveSpeed = 15f;
+    [SerializeField] private float fadeSpeed = 5f;
+
+    private GameObject indicatorInstance;
+    private SpriteRenderer indicatorRenderer;
+    private float targetAlpha = 0f;
+    private float currentAlpha = 0f;
+
     private float nextAttackTime;
+
+    void Start()
+    {
+        // Create indicator once at the start and hide it
+        if (indicatorPrefab != null)
+        {
+            indicatorInstance = Instantiate(indicatorPrefab);
+            indicatorRenderer = indicatorInstance.GetComponentInChildren<SpriteRenderer>();
+            if (indicatorRenderer != null)
+            {
+                Color c = indicatorRenderer.color;
+                c.a = 0f;
+                indicatorRenderer.color = c;
+            }
+        }
+    }
+
+    void Update()
+    {
+        // Check nearest enemy and move circle to them
+        UpdateTargetIndicator();
+    }
+
+    private void UpdateTargetIndicator()
+    {
+        if (indicatorInstance == null) return;
+
+        Transform target = FindClosestEnemy();
+
+        if (target != null)
+        {
+            targetAlpha = 1f;
+
+            // Position indicator under enemy
+            Vector3 groundPos = target.position;
+            groundPos.y += 0.05f;
+            indicatorInstance.transform.position = Vector3.Lerp(indicatorInstance.transform.position, groundPos, Time.deltaTime * moveSpeed);
+        }
+        else
+        {
+            targetAlpha = 0f;
+        }
+
+        // Handle smooth fade
+        if (indicatorRenderer != null)
+        {
+            currentAlpha = Mathf.MoveTowards(currentAlpha, targetAlpha, Time.deltaTime * fadeSpeed);
+            Color c = indicatorRenderer.color;
+            c.a = currentAlpha;
+            indicatorRenderer.color = c;
+        }
+    }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
@@ -63,6 +125,13 @@ public class PlayerAttack : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
+            if (hit == null || !hit.gameObject.activeInHierarchy)
+                continue;
+
+            Health health = hit.GetComponentInParent<Health>();
+            if (health != null && health.IsDead)
+                continue;
+
             Vector3 targetPoint = GetTargetPoint(hit.transform);
             Vector3 directionToEnemy = targetPoint - firePoint.position;
             float distance = directionToEnemy.magnitude;

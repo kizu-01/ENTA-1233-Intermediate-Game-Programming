@@ -124,7 +124,10 @@ MonoBehaviour:
   _mainMenuPrefab: {fileID: 3337753152252030631, guid: b460d693855274329aa2b4d92a36e07f, type: 3}
   _settingsMenuPrefab: {fileID: 7759477483224727364, guid: acfd65e77be9c444196060bb458eee63, type: 3}
   _inGameUIPrefab: {fileID: 2968855652903854471, guid: 7fc904751edfd44bf9f6e2d818e2febc, type: 3}
+  _levelSelectMenuPrefab: {fileID: 5812993580496314533, guid: c20b9958dcb1cbe4d85ea4f16394e214, type: 3}
   _gameOverMenuPrefab: {fileID: 4633760019947690283, guid: d566c6d6cd9636740aa1638fca58d5c9, type: 3}
+  _levelCompleteMenuPrefab: {fileID: 3694091093083164182, guid: 66097caee96326944b508b5c44dccf99, type: 3}
+  _pauseMenuPrefab: {fileID: 4576357703152497417, guid: 76bee5c674d54304f97703e5cd6d1bfd, type: 3}
 --- !u!1001 &5911991904489727633
 PrefabInstance:
   m_ObjectHideFlags: 0
