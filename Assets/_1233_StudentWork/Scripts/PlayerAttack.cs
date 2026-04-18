@@ -63,6 +63,13 @@ public class PlayerAttack : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
+            if (hit == null || !hit.gameObject.activeInHierarchy)
+                continue;
+
+            Health health = hit.GetComponentInParent<Health>();
+            if (health != null && health.IsDead)
+                continue;
+
             Vector3 targetPoint = GetTargetPoint(hit.transform);
             Vector3 directionToEnemy = targetPoint - firePoint.position;
             float distance = directionToEnemy.magnitude;
