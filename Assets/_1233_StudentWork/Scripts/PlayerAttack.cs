@@ -11,7 +11,49 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private LayerMask obstacleLayer;
 
+    [Header("Target Indicator")]
+    [SerializeField] private GameObject indicatorPrefab;
+    private GameObject indicatorInstance;
+
     private float nextAttackTime;
+
+    void Start()
+    {
+        // Create indicator once at the start and hide it
+        if (indicatorPrefab != null)
+        {
+            indicatorInstance = Instantiate(indicatorPrefab);
+            indicatorInstance.SetActive(false);
+        }
+    }
+
+    void Update()
+    {
+        // Check nearest enemy and move circle to them
+        UpdateTargetIndicator();
+    }
+
+    private void UpdateTargetIndicator()
+    {
+        if (indicatorInstance == null) return;
+
+        Transform target = FindClosestEnemy();
+
+        if (target != null)
+        {
+            indicatorInstance.SetActive(true);
+
+            // Position indicator under enemy
+            Vector3 groundPos = target.position;
+            groundPos.y += 0.05f;
+            indicatorInstance.transform.position = groundPos;
+        }
+        else
+        {
+            // Hide if no enemies in range
+            indicatorInstance.SetActive(false);
+        }
+    }
 
     public void OnAttack(InputAction.CallbackContext context)
     {

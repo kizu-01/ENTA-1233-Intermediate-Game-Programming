@@ -2153,6 +2153,7 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 512
+  indicatorPrefab: {fileID: 3111005078926950356, guid: de3c774dbc9498041b260e955d72454a, type: 3}
 --- !u!114 &4329246352081204881
 MonoBehaviour:
   m_ObjectHideFlags: 0
