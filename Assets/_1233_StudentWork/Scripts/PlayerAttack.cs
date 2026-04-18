@@ -13,7 +13,13 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Target Indicator")]
     [SerializeField] private GameObject indicatorPrefab;
+    [SerializeField] private float moveSpeed = 15f;
+    [SerializeField] private float fadeSpeed = 5f;
+
     private GameObject indicatorInstance;
+    private SpriteRenderer indicatorRenderer;
+    private float targetAlpha = 0f;
+    private float currentAlpha = 0f;
 
     private float nextAttackTime;
 
@@ -23,7 +29,13 @@ public class PlayerAttack : MonoBehaviour
         if (indicatorPrefab != null)
         {
             indicatorInstance = Instantiate(indicatorPrefab);
-            indicatorInstance.SetActive(false);
+            indicatorRenderer = indicatorInstance.GetComponentInChildren<SpriteRenderer>();
+            if (indicatorRenderer != null)
+            {
+                Color c = indicatorRenderer.color;
+                c.a = 0f;
+                indicatorRenderer.color = c;
+            }
         }
     }
 
@@ -41,17 +53,25 @@ public class PlayerAttack : MonoBehaviour
 
         if (target != null)
         {
-            indicatorInstance.SetActive(true);
+            targetAlpha = 1f;
 
             // Position indicator under enemy
             Vector3 groundPos = target.position;
             groundPos.y += 0.05f;
-            indicatorInstance.transform.position = groundPos;
+            indicatorInstance.transform.position = Vector3.Lerp(indicatorInstance.transform.position, groundPos, Time.deltaTime * moveSpeed);
         }
         else
         {
-            // Hide if no enemies in range
-            indicatorInstance.SetActive(false);
+            targetAlpha = 0f;
+        }
+
+        // Handle smooth fade
+        if (indicatorRenderer != null)
+        {
+            currentAlpha = Mathf.MoveTowards(currentAlpha, targetAlpha, Time.deltaTime * fadeSpeed);
+            Color c = indicatorRenderer.color;
+            c.a = currentAlpha;
+            indicatorRenderer.color = c;
         }
     }
 
